@@ -1,0 +1,75 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <!-- /.card-header -->
+      <div class="card-body">
+        <div class="row" *ngFor="let item of mac_address_id_chart; let i = index">
+          <div class="col-md-12">
+            <p class="text-center">
+              <strong>จาก</strong>
+              <strong>
+                วันที่ {{ start_datetime_chart | date:'dd' }}
+                เดือน {{ getThaiMonth(start_datetime_chart.getMonth() + 1 + '') }}
+                ปี {{ start_datetime_chart.getFullYear() + 543 }}
+              </strong>
+              <strong>ถึง</strong>
+              <strong>
+                วันที่ {{ end_datetime_chart | date:'dd' }}
+                เดือน {{ getThaiMonth(end_datetime_chart.getMonth() + 1 + '') }}
+                ปี {{ end_datetime_chart.getFullYear() + 543 }}
+              </strong>
+            </p>
+
+            <div class="position-relative mb-4">
+              <canvas id="{{item.mac_address}}"></canvas>
+            </div>
+            <hr>
+          </div>
+
+          <div class="col-md-12">
+            <p class="text-center">
+              <strong>จุดปฏิบัติการ {{item.mac_address}} </strong>
+            </p>
+            <div class="row col-12">
+              <div class="col-6">
+                <div class="description-block border-right">
+                  <span class="description-percentage text-success"><i class="fas fa-caret-up"></i>
+                    {{item.max_humidity_data}}° C</span>
+                  <span class="description-text text-primary"> อุณหภูมิสูงสุด</span>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="description-block border-right">
+                  <span class="description-percentage text-danger"><i class="fas fa-caret-down"></i>
+                    {{item.min_humidity_data}}° C</span>
+                  <span class="description-text text-primary"> อุณหภูมิต่ำสุด</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="row col-12">
+              <div class="col-6">
+                <div class="description-block border-right">
+                  <span class="description-percentage text-success"><i class="fas fa-caret-up"></i>
+                    {{item.max_temperature_data}}° C</span>
+                  <span class="description-text text-gray"> ความชื้นสูงสุด</span>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="description-block border-right">
+                  <span class="description-percentage text-danger"><i class="fas fa-caret-down"></i>
+                    {{item.min_temperature_data}}° C</span>
+                  <span class="description-text text-gray"> ความชื้นต่ำสุด</span>
+                </div>
+              </div>
+            </div>
+            <hr>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <!-- /.card -->
+  </div>
+  <!-- /.col -->
+</div>

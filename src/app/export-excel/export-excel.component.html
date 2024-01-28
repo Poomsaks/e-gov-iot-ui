@@ -1,0 +1,29 @@
+<table id="tableId" *ngFor="let item1 of data_excel_header;">
+  <thead>
+    <tr>
+      <th>{{item1.name}}</th>
+    </tr>
+    <tr>
+      <th>จุดปฏิบัติการ {{item1.position}}</th>
+    </tr>
+    <tr>
+      <th>Mac Address</th>
+      <th>อุณหภูมิ</th>
+      <th>ความชื้น</th>
+      <th>เลข ip Address</th>
+      <th>วันที่</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    <ng-container *ngFor="let boardIot of item1.board_iot_ids">
+      <tr>
+        <td>{{boardIot.mac_address}}</td>
+        <td>{{boardIot.temperature}}</td>
+        <td>{{boardIot.humidity}}</td>
+        <td>{{boardIot.ip_connect}}</td>
+        <td>{{boardIot.formatted_date}}</td>
+      </tr>
+    </ng-container>
+  </tbody>
+</table>
