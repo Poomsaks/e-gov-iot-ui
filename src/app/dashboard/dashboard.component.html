@@ -27,15 +27,17 @@
     <aside class="main-sidebar sidebar-light-primary elevation-4 color_linear_right" data-widget="pushmenu" href="#"
       role="button">
       <a class="brand-link color_linear_right">
-        <img src="assets/loadpage.png" alt="AdminLTE Logo" style="opacity: .8;width: 47px;">
-        <span class="brand-text font-weight-light">แจ้งเตือนอุณหภูมิ</span>
+        <!-- <img src="{{images}}" alt="MeditechInsights" style="opacity: .8;width: 10%;"> -->
+        <img src="{{images}}" class="img-circle elevation-2" alt="User Image" style="width: 23px;margin-left: 18px;">
+        <span class="brand-text font-weight-light" style="margin-left: 10px;">  แจ้งเตือนอุณหภูมิ</span>
+
       </a>
       <!-- Sidebar -->
       <div class="sidebar">
         <!-- Sidebar user panel (optional) -->
-        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        <div class="user-panel pb-3 mb-3 d-flex" style="margin-top: 15px;">
           <div class="image">
-            <img src="assets/logo160x160.png" class="img-circle elevation-2" alt="User Image">
+            <img src="{{images}}" class="img-circle elevation-2" alt="User Image">
           </div>
           <div class="info">
             <a (click)="goToDDashboard()" class="d-block">{{name}}</a>
@@ -53,6 +55,14 @@
                 </p>
               </a>
             </li>
+            <!-- <li class="nav-item">
+              <a (click)="goToExcel()" class="nav-link">
+                <i class="nav-icon fas fa-print"></i>
+                <p>
+                  รายงาน excel
+                </p>
+              </a>
+            </li> -->
             <li class="nav-item">
               <a (click)="logout()" class="nav-link">
                 <i class="nav-icon fas fa-sign-out-alt"></i>
@@ -92,8 +102,8 @@
               <div class="info-box mb-3">
                 <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-map-marked"></i></span>
                 <div class="info-box-content">
-                  <span class="info-box-text">โรงพยาบาลส่งเสริมสุขภาพตําบลวังทอง</span>
-                  <span class="info-box-text">ที่ตั้ง จ.อุดรธานี อ.บ้านดุง ต.วังทอง หมู่ 2. โทร. 0878654536</span>
+                  <span class="info-box-text">{{hostpital_name}}</span>
+                  <span class="info-box-text">{{address_hostpital}}</span>
                 </div>
               </div>
             </div>
@@ -132,8 +142,8 @@
                     </div>
                     <div class="card-tools">
                       <div class="btn-group">
-                        <button (click)="downloadExcel()" type="button"
-                          class="btn btn-default btn-success">Excel</button>
+                        <button (click)="goToExcel()" type="button"
+                          class="btn btn-default btn-success">รายงาน excel</button>
                       </div>
                     </div>
                   </div>
@@ -161,7 +171,7 @@
                     </div>
                   </div>
 
-                  <div class="row" *ngFor="let item of mac_address_id_chart; let i = index">
+                  <div class="row" *ngFor="let item of mac_address_id_chart; let i = index" style="margin-top: 20px;">
                     <div class="col-md-9">
                       <p class="text-center">
                         <strong>จาก</strong>
@@ -188,7 +198,7 @@
                     <div class="col-md-3">
 
                       <p class="text-center">
-                        <strong>จุดปฏิบัติการ {{item.mac_address}} </strong>
+                        <strong>จุดปฏิบัติการ : {{item.position}} </strong>
                       </p>
                       <div class="row col-12">
                         <div class="col-6">

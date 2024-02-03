@@ -38,21 +38,28 @@ export class PrintChartDateComponent {
       }
     }
   };
-  mac_address_id_chart: { mac_address: any, max_humidity_data: any, min_humidity_data: any, max_temperature_data: any, min_temperature_data: any, average_temperature: any, average_humidity: any }[] = [];
+  mac_address_id_chart: { mac_address: any, max_humidity_data: any, min_humidity_data: any, max_temperature_data: any, min_temperature_data: any, average_temperature: any, average_humidity: any , position: any}[] = [];
   start_datetime_chart!: Date;
   end_datetime_chart!: Date;
   datePipe = new DatePipe('en-US');
+
+  name: any;
+  data_position: any;
+  hostpital_name: any;
+  address_hostpital: any;
+
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
 
       const data = JSON.parse(params['data']);
 
       if (localStorage.getItem('mac_address')) {
+        this.name = localStorage.getItem('name')
         const data: any = localStorage.getItem('mac_address')
         const dataArray = data.split(',');
         for (let index = 0; index < dataArray.length; index++) {
           const element = dataArray[index];
-          this.mac_address_id_chart.push({ mac_address: element, max_humidity_data: 0, min_humidity_data: 0, max_temperature_data: 0, min_temperature_data: 0, average_temperature: 0, average_humidity: 0 });
+          this.mac_address_id_chart.push({ mac_address: element, max_humidity_data: 0, min_humidity_data: 0, max_temperature_data: 0, min_temperature_data: 0, average_temperature: 0, average_humidity: 0 , position: ""});
 
         }
       }
@@ -69,6 +76,23 @@ export class PrintChartDateComponent {
 
       const startDate: any = this.datePipe.transform(data.start_datetime_chart, 'yyyy-MM-dd 00:00:00');
       const endDate: any = this.datePipe.transform(data.end_datetime_chart, 'yyyy-MM-dd 23:59:59');
+
+      const applicationData = {
+        mac_address: this.name,
+      }
+      this._serviceService.get_time_data(applicationData).subscribe((response: any) => {
+        this.data_position = response.result.response
+        this.hostpital_name = response.result.response[0].name
+        this.address_hostpital = response.result.response[0].address
+        for (let index = 0; index < this.data_position.length; index++) {
+          const element = this.data_position[index].mac_address;
+          const position = this.data_position[index].position;
+          const indexOfObjectToUpdate = this.mac_address_id_chart.findIndex(item => item.mac_address === element);
+          if (indexOfObjectToUpdate !== -1) {
+            this.mac_address_id_chart[indexOfObjectToUpdate].position = position;
+          }
+        }
+      });
 
       if (this.mac_address_id_chart) {
         for (let index = 0; index < this.mac_address_id_chart.length; index++) {
@@ -87,6 +111,9 @@ export class PrintChartDateComponent {
               const min_humidity_data = response.result.min_humidity_data;
               const max_temperature_data = response.result.max_temperature_data;
               const min_temperature_data = response.result.min_temperature_data;
+
+              const average_temperature = response.result.average_temperature;
+              const average_humidity = response.result.average_humidity;
               const indexOfObjectToUpdate = this.mac_address_id_chart.findIndex(item => item.mac_address === element);
 
               if (indexOfObjectToUpdate !== -1) {
@@ -94,6 +121,9 @@ export class PrintChartDateComponent {
                 this.mac_address_id_chart[indexOfObjectToUpdate].min_humidity_data = min_humidity_data;
                 this.mac_address_id_chart[indexOfObjectToUpdate].max_temperature_data = max_temperature_data;
                 this.mac_address_id_chart[indexOfObjectToUpdate].min_temperature_data = min_temperature_data;
+
+                this.mac_address_id_chart[indexOfObjectToUpdate].average_temperature = average_temperature;
+                this.mac_address_id_chart[indexOfObjectToUpdate].average_humidity = average_humidity;
               }
               const chartLine = document.getElementById(element) as HTMLCanvasElement;
               this.new_chart(chartLine, this.new_data_service(date_data, temperature, humidity))

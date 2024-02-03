@@ -58,6 +58,8 @@ export class ServiceService {
     const payload = {
       params: {
         mac_address: applicationData.mac_address,
+        start_datetime: applicationData.start_datetime,
+        end_datetime: applicationData.end_datetime,
       }
     };
     return this.http.post<any>(environment.config.baseConfig.apiUrl + "/api/get_time_data_excel", payload, { withCredentials: true })

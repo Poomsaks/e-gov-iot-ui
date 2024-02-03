@@ -1,29 +1,59 @@
-<table id="tableId" *ngFor="let item1 of data_excel_header;">
-  <thead>
-    <tr>
-      <th>{{item1.name}}</th>
-    </tr>
-    <tr>
-      <th>จุดปฏิบัติการ {{item1.position}}</th>
-    </tr>
-    <tr>
-      <th>Mac Address</th>
-      <th>อุณหภูมิ</th>
-      <th>ความชื้น</th>
-      <th>เลข ip Address</th>
-      <th>วันที่</th>
-    </tr>
-  </thead>
-  <tbody>
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">รายงานอุณหภูมิและความชื้น</h3>
 
-    <ng-container *ngFor="let boardIot of item1.board_iot_ids">
-      <tr>
-        <td>{{boardIot.mac_address}}</td>
-        <td>{{boardIot.temperature}}</td>
-        <td>{{boardIot.humidity}}</td>
-        <td>{{boardIot.ip_connect}}</td>
-        <td>{{boardIot.formatted_date}}</td>
-      </tr>
-    </ng-container>
-  </tbody>
-</table>
+        <div class="card-tools">
+          <div class="input-group input-group-sm" style="width: 90px;">
+            <div class="input-group-append">
+              <button (click)="downloadExcel()" type="submit" class="btn btn-default">
+                <i class="fas fa-print"> พิมพ์</i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /.card-header -->
+      <div class="card-body table-responsive p-0">
+        <table class="table table-hover text-nowrap" id="table">
+          <thead>
+            <tr>
+              <th>จุดปฏิบัติการ</th>
+              <th>Max Address</th>
+              <th>อุณหภูมิ</th>
+              <th>อุณหภูมิสูงสุด</th>
+              <th>อุณหภูมิต่ำสุด</th>
+              <th>อุณหภูมิเฉลี่ย</th>
+              <th>ความชื้น</th>
+              <th>ความชื้นสูงสุด</th>
+              <th>ความชื้นต่ำสุด</th>
+              <th>ความชื้นเฉลี่ย</th>
+              <th>วันที่</th>
+            </tr>
+          </thead>
+          <tbody *ngFor="let item of mac_address_id_chart;">
+            <tr *ngFor="let data of item.temperature;let i = index">
+              <td>{{ item.position }}</td>
+              <td>{{ item.mac_address }}</td>
+              <td>{{ item.temperature[i] | number: '1.2-2' }}</td>
+              <td>{{ item.max_humidity_data | number: '1.2-2' }}</td>
+              <td>{{ item.min_humidity_data | number: '1.2-2' }}</td>
+              <td>{{ item.average_temperature | number: '1.2-2' }}</td>
+
+              <td>{{ item.humidity[i] | number: '1.2-2' }}</td>
+              <td>{{ item.max_temperature_data | number: '1.2-2' }}</td>
+              <td>{{ item.min_temperature_data | number: '1.2-2' }}</td>
+              <td>{{ item.average_humidity | number: '1.2-2' }}</td>
+
+              <td>{{ item.date_data[i]}}</td>
+            </tr>
+          </tbody>
+
+        </table>
+      </div>
+      <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+  </div>
+</div>

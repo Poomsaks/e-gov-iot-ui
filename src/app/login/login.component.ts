@@ -15,6 +15,7 @@ export class LoginComponent {
   mac_address!: string;
   password!: string;
   mac_address_data: any[] = [];
+  images: any;
   constructor(
     private _serviceService: ServiceService,
     private router: Router,
@@ -58,12 +59,13 @@ export class LoginComponent {
           this._serviceService.get_time_data(applicationData).subscribe((response: any) => {
             const address = response.result.response
             // this.interfaceService.setUserData(address);
+            // console.log(address);
             for (let index = 0; index < address.length; index++) {
               const element_1 = address[index].mac_address;
               this.mac_address_data.push(element_1);
-              // this.storageService.saveArrayToSessionStorage('mac_address', this.mac_address_data);
+              this.images = address[index].image;
             }
-
+            localStorage.setItem('images', this.images.toString());
             localStorage.setItem('mac_address', this.mac_address_data.toString());
             this.router.navigate(['/dashboard']);
           });

@@ -28,7 +28,7 @@
 
           <div class="col-md-12">
             <p class="text-center">
-              <strong>จุดปฏิบัติการ {{item.mac_address}} </strong>
+              <strong>จุดปฏิบัติการ : {{item.position}} </strong>
             </p>
             <div class="row col-12">
               <div class="col-6">
@@ -62,6 +62,31 @@
                   <span class="description-text text-gray"> ความชื้นต่ำสุด</span>
                 </div>
               </div>
+            </div>
+
+            <div class="card-footer col-md-12">
+              <div class="row">
+                <div class="col-sm-6 col-6">
+                  <div class="description-block border-right">
+                    <span class="description-percentage text-info"> <i class="fas fa-caret-left"></i>
+                      {{item.average_temperature | number: '1.2-2'}}° C</span>
+                    <h5 class="description-header"></h5>
+                    <span class="description-text">อุณหภูมิเฉลี่ย</span>
+                  </div>
+                  <!-- /.description-block -->
+                </div>
+                <!-- /.col -->
+                <div class="col-sm-6 col-6">
+                  <div class="description-block">
+                    <span class="description-percentage text-info"><i class="fas fa-caret-left"></i>
+                      {{item.average_humidity | number: '1.2-2'}}° C </span>
+                    <h5 class="description-header"></h5>
+                    <span class="description-text">ความชื้นเฉลี่ย</span>
+                  </div>
+                  <!-- /.description-block -->
+                </div>
+              </div>
+              <!-- /.row -->
             </div>
             <hr>
           </div>

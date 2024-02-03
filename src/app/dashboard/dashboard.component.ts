@@ -23,6 +23,8 @@ export class DashboardComponent implements OnInit {
   date_show: Date = new Date();
 
   data_position: any;
+  hostpital_name: any;
+  address_hostpital: any;
   chartLineOptions: any = {
     maintainAspectRatio: false,
     plugins: {
@@ -50,7 +52,7 @@ export class DashboardComponent implements OnInit {
   chartPie_agriculture_01: any;
   chartPie_agriculture_02: any;
   id_chart: any
-  mac_address_id_chart: { mac_address: any, max_humidity_data: any, min_humidity_data: any, max_temperature_data: any, min_temperature_data: any, average_temperature: any, average_humidity: any }[] = [];
+  mac_address_id_chart: { mac_address: any, max_humidity_data: any, min_humidity_data: any, max_temperature_data: any, min_temperature_data: any, average_temperature: any, average_humidity: any , position: any}[] = [];
 
   start_datetime: any
   end_datetime: any
@@ -58,6 +60,7 @@ export class DashboardComponent implements OnInit {
   start_datetime_chart!: Date;
   end_datetime_chart!: Date;
 
+  images: any;
   constructor(private _serviceService: ServiceService,
     private http: HttpClient,
     private router: Router,
@@ -71,6 +74,7 @@ export class DashboardComponent implements OnInit {
     if (localStorage.getItem('name')) {
       this.name = localStorage.getItem('name')
       this.id_chart = localStorage.getItem('name')
+      this.images = localStorage.getItem('images')
     }
 
     if (localStorage.getItem('start_datetime') && localStorage.getItem('end_datetime')) {
@@ -87,12 +91,12 @@ export class DashboardComponent implements OnInit {
     }
 
     if (localStorage.getItem('mac_address')) {
-      console.log(localStorage.getItem('mac_address'))
+      // console.log(localStorage.getItem('mac_address'))
       const data: any = localStorage.getItem('mac_address')
       const dataArray = data.split(',');
       for (let index = 0; index < dataArray.length; index++) {
         const element = dataArray[index];
-        this.mac_address_id_chart.push({ mac_address: element, max_humidity_data: 0, min_humidity_data: 0, max_temperature_data: 0, min_temperature_data: 0, average_temperature: 0, average_humidity: 0 });
+        this.mac_address_id_chart.push({ mac_address: element, max_humidity_data: 0, min_humidity_data: 0, max_temperature_data: 0, min_temperature_data: 0, average_temperature: 0, average_humidity: 0 , position: ""});
 
       }
     }
@@ -108,9 +112,20 @@ export class DashboardComponent implements OnInit {
     }
     this._serviceService.get_time_data(applicationData).subscribe((response: any) => {
       this.data_position = response.result.response
+      this.hostpital_name = response.result.response[0].name
+      this.address_hostpital = response.result.response[0].address
+      for (let index = 0; index < this.data_position.length; index++) {
+        const element = this.data_position[index].mac_address;
+        const position = this.data_position[index].position;
+        const indexOfObjectToUpdate = this.mac_address_id_chart.findIndex(item => item.mac_address === element);
+        if (indexOfObjectToUpdate !== -1) {
+          this.mac_address_id_chart[indexOfObjectToUpdate].position = position;
+        }
+      }
     });
 
     if (this.mac_address_id_chart) {
+
       for (let index = 0; index < this.mac_address_id_chart.length; index++) {
         const element = this.mac_address_id_chart[index].mac_address;
         const paramData = {
@@ -359,8 +374,16 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  downloadExcel() {
-    this.router.navigate(['/export-excel']);
+  goToExcel() {
+    const applicationData = {
+      start_datetime_chart: this.start_datetime_chart,
+      end_datetime_chart: this.end_datetime_chart,
+    }
+    const applicationDataString = JSON.stringify(applicationData);
+    const url = this.router.serializeUrl(
+      this.router.createUrlTree(['/meditech-pro/export-excel'], { queryParams: { data: applicationDataString } })
+    );
+    window.open(url, '_blank');
   }
   printChartData() {
     const applicationData = {
@@ -369,6 +392,7 @@ export class DashboardComponent implements OnInit {
     }
     const applicationDataString = JSON.stringify(applicationData);
     const url = this.router.serializeUrl(
+      // this.router.createUrlTree(['/meditech-pro/print-chart-date'], { queryParams: { data: applicationDataString } })
       this.router.createUrlTree(['/meditech-pro/print-chart-date'], { queryParams: { data: applicationDataString } })
     );
 
