@@ -6,6 +6,7 @@ import { LogoutComponent } from './logout/logout.component';
 import { AuthGuard } from './environments/AuthGuard';
 import { PrintChartDateComponent } from './print-chart-date/print-chart-date.component';
 import { ExportExcelComponent } from './export-excel/export-excel.component';
+import { PrintDataTemplateComponent } from './print-data-template/print-data-template.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent , canActivate: [AuthGuard] },
@@ -14,6 +15,7 @@ const routes: Routes = [
   { path: 'logout', component: LogoutComponent , canActivate: [AuthGuard] },
   { path: 'print-chart-date', component: PrintChartDateComponent},
   { path: 'export-excel', component: ExportExcelComponent},
+  { path: 'print-data-template', component: PrintDataTemplateComponent},
 
 
 ];

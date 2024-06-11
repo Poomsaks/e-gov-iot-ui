@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>แบบบันทึกอุณหภูมิตู้เย็น</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    td,
+    th {
+      border: 1px solid #ddd;
+      padding: 5px;
+    }
+
+    th {
+      text-align: center;
+    }
+  </style>
+</head>
+<!-- (&#8451;) -->
+
+<body>
+  <h1>แบบบันทึกอุณหภูมิตู้เย็น</h1>
+  <p class="text-left">
+    <strong>จาก</strong>
+    <strong>
+      วันที่ {{ start_datetime_chart | date:'dd' }}
+      เดือน {{ getThaiMonth(start_datetime_chart.getMonth() + 1 + '') }}
+      ปี {{ start_datetime_chart.getFullYear() + 543 }}
+    </strong>
+    <strong>ถึง</strong>
+    <strong>
+      วันที่ {{ end_datetime_chart | date:'dd' }}
+      เดือน {{ getThaiMonth(end_datetime_chart.getMonth() + 1 + '') }}
+      ปี {{ end_datetime_chart.getFullYear() + 543 }}
+    </strong>
+  </p>
+  <table border="2">
+    <thead>
+      <!-- <tr>
+        <th rowspan="2" style="border: 2px solid black;"></th>
+        <th colspan="63" style="border: 2px solid black;">วันที่</th>
+      </tr> -->
+      <!-- <tr>
+        <th></th>
+        <th colspan="2" style="border: 2px solid black;">1</th>
+        <th colspan="2" style="border: 2px solid black;">2</th>
+        <th colspan="2" style="border: 2px solid black;">3</th>
+        <th colspan="2" style="border: 2px solid black;">4</th>
+        <th colspan="2" style="border: 2px solid black;">5</th>
+        <th colspan="2" style="border: 2px solid black;">6</th>
+        <th colspan="2" style="border: 2px solid black;">7</th>
+        <th colspan="2" style="border: 2px solid black;">8</th>
+        <th colspan="2" style="border: 2px solid black;">9</th>
+        <th colspan="2" style="border: 2px solid black;">10</th>
+        <th colspan="2" style="border: 2px solid black;">11</th>
+        <th colspan="2" style="border: 2px solid black;">12</th>
+        <th colspan="2" style="border: 2px solid black;">13</th>
+        <th colspan="2" style="border: 2px solid black;">14</th>
+        <th colspan="2" style="border: 2px solid black;">15</th>
+        <th colspan="2" style="border: 2px solid black;">16</th>
+        <th colspan="2" style="border: 2px solid black;">17</th>
+        <th colspan="2" style="border: 2px solid black;">18</th>
+        <th colspan="2" style="border: 2px solid black;">19</th>
+        <th colspan="2" style="border: 2px solid black;">20</th>
+        <th colspan="2" style="border: 2px solid black;">21</th>
+        <th colspan="2" style="border: 2px solid black;">22</th>
+        <th colspan="2" style="border: 2px solid black;">23</th>
+        <th colspan="2" style="border: 2px solid black;">24</th>
+        <th colspan="2" style="border: 2px solid black;">25</th>
+        <th colspan="2" style="border: 2px solid black;">26</th>
+        <th colspan="2" style="border: 2px solid black;">27</th>
+        <th colspan="2" style="border: 2px solid black;">28</th>
+        <th colspan="2" style="border: 2px solid black;">29</th>
+        <th colspan="2" style="border: 2px solid black;">30</th>
+        <th colspan="2" style="border: 2px solid black;">31</th>
+      </tr> -->
+    </thead>
+    <tbody>
+        <th rowspan="2" style="border: 2px solid black;" [hidden]="data_all2.length === 0">อุปกรณ์</th>
+        <tr style="border: 2px solid black;" *ngFor="let item_1 of mac_address_id_chart" [hidden]="data_all2.length === 0">
+          <th style="border: 2px solid black;">วันที่<br>เวลา</th>
+          <ng-container *ngFor="let itemArray of data_all2">
+            <ng-container *ngFor="let item of itemArray">
+              <th style="border: 2px solid black; padding-top: 15px;"><p>{{ item.date | date:'dd/MM' }}<br>{{ item.date | date:'HH:mm' }}</p></th>
+            </ng-container>
+          </ng-container>
+        </tr>
+        <tr style="text-align: center;" *ngFor="let item_1 of mac_address_id_chart" [hidden]="data_all2.length === 0">
+
+          <td style="border: 2px solid black; padding-top: 15px;">
+            <p>{{item_1.mac_address}}</p>
+            <p>{{item_1.position}}</p>
+          </td>
+          <td style="border: 2px solid black; padding-top: 15px;">
+            <p>อุณหภูมิ</p>
+            <p>ความชื้น</p>
+          </td>
+
+          <!-- วนลูปเพื่อแสดงข้อมูลของแต่ละวันในแต่ละอุปกรณ์ -->
+          <ng-container *ngFor="let itemArray of data_all2">
+            <!-- วนลูปเพื่อแสดงข้อมูลของแต่ละวัน -->
+            <ng-container *ngFor="let item of itemArray">
+              <!-- ตรวจสอบว่าข้อมูลเป็นของอุปกรณ์เดียวกันหรือไม่ -->
+              <td style="border: 2px solid black; padding-top: 15px;" *ngIf="item.mac_address === item_1.mac_address">
+                <p> {{ item.temperature }} </p>
+                <p> {{ item.humidity }} </p>
+              </td>
+            </ng-container>
+          </ng-container>
+        </tr>
+
+
+      <th rowspan="2" style="border: 2px solid black;" [hidden]="data_all3.length === 0">อุปกรณ์</th>
+      <tr style="border: 2px solid black;" *ngFor="let item_1 of mac_address_id_chart" [hidden]="data_all3.length === 0">
+        <th style="border: 2px solid black;">วันที่<br>เวลา</th>
+        <ng-container *ngFor="let itemArray of data_all3">
+          <ng-container *ngFor="let item of itemArray">
+            <th style="border: 2px solid black; padding-top: 15px;"><p>{{ item.date | date:'dd/MM' }}<br>{{ item.date | date:'HH:mm' }}</p></th>
+          </ng-container>
+        </ng-container>
+      </tr>
+      <tr style="text-align: center;" *ngFor="let item_1 of mac_address_id_chart" [hidden]="data_all3.length === 0">
+
+        <td style="border: 2px solid black; padding-top: 15px;">
+          <p>{{item_1.mac_address}}</p>
+          <p>{{item_1.position}}</p>
+        </td>
+        <td style="border: 2px solid black; padding-top: 15px;">
+          <p>อุณหภูมิ</p>
+          <p>ความชื้น</p>
+        </td>
+
+        <!-- วนลูปเพื่อแสดงข้อมูลของแต่ละวันในแต่ละอุปกรณ์ -->
+        <ng-container *ngFor="let itemArray of data_all3">
+          <!-- วนลูปเพื่อแสดงข้อมูลของแต่ละวัน -->
+          <ng-container *ngFor="let item of itemArray">
+            <td style="border: 2px solid black; padding-top: 15px;" *ngIf="item.mac_address === item_1.mac_address">
+              <p> {{ item.temperature }} </p>
+              <p> {{ item.humidity }} </p>
+            </td>
+          </ng-container>
+        </ng-container>
+      </tr>
+
+      <th rowspan="2" style="border: 2px solid black;" [hidden]="data_all.length === 0">อุปกรณ์</th>
+      <tr style="border: 2px solid black;" *ngFor="let item_1 of mac_address_id_chart" [hidden]="data_all.length === 0">
+        <th style="border: 2px solid black; ">วันที่<br>เวลา</th>
+        <ng-container *ngFor="let itemArray of data_all">
+          <ng-container *ngFor="let item of itemArray">
+            <th style="border: 2px solid black; padding-top: 15px;"><p>{{ item.date | date:'dd/MM' }}<br>{{ item.date | date:'HH:mm' }}</p></th>
+          </ng-container>
+        </ng-container>
+      </tr>
+      <tr style="text-align: center;" *ngFor="let item_1 of mac_address_id_chart" [hidden]="data_all.length === 0">
+
+        <td style="border: 2px solid black; padding-top: 15px;">
+          <p>{{item_1.mac_address}}</p>
+          <p>{{item_1.position}}</p>
+        </td>
+        <td style="border: 2px solid black; padding-top: 15px;">
+          <p>อุณหภูมิ</p>
+          <p>ความชื้น</p>
+        </td>
+
+        <!-- วนลูปเพื่อแสดงข้อมูลของแต่ละวันในแต่ละอุปกรณ์ -->
+        <ng-container *ngFor="let itemArray of data_all">
+          <!-- วนลูปเพื่อแสดงข้อมูลของแต่ละวัน -->
+          <ng-container *ngFor="let item of itemArray">
+            <td style="border: 2px solid black; padding-top: 15px;" *ngIf="item.mac_address === item_1.mac_address">
+              <!-- <th style="border: 2px solid black; padding-top: 15px;"><p>{{ item.temperature }}<br>{{ item.humidity }}</p></th> -->
+              <p> {{ item.temperature }} </p>
+              <p> {{ item.humidity }} </p>
+            </td>
+          </ng-container>
+        </ng-container>
+      </tr>
+
+    </tbody>
+  </table>
+  <br>
+  <p><strong>บันทึกเวลา:</strong> 09.00 น. และ 15.00 น.</p>
+  <p><strong>อุณหภูมิภายในช่องธรรมดา:</strong> (+2 °C ถึง +8 °)
+  <p style="text-align: right;"><strong>ลงชื่อ:..........................................</strong>
+  <p style="text-align: right;"><strong>ผู้ประเมิน:..........................................</strong>

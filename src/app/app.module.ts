@@ -20,6 +20,7 @@ import { DatePipe } from '@angular/common';
 import { PrintChartDateComponent } from './print-chart-date/print-chart-date.component';
 import { ExportAsModule } from 'ngx-export-as';
 import { ExportExcelComponent } from './export-excel/export-excel.component';
+import { PrintDataTemplateComponent } from './print-data-template/print-data-template.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -27,7 +28,8 @@ import { ExportExcelComponent } from './export-excel/export-excel.component';
     LoginComponent,
     LogoutComponent,
     PrintChartDateComponent,
-    ExportExcelComponent
+    ExportExcelComponent,
+    PrintDataTemplateComponent
   ],
   imports: [
     BrowserModule,

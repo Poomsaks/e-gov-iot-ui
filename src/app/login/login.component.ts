@@ -47,7 +47,7 @@ export class LoginComponent {
     this._serviceService.authenticate_iot(formattedData).subscribe(async (response: any) => {
       // console.log('Authentication Response:', response);
       if (response.result) {
-        if (response.result.session_id) {
+        if (response.result.uid) {
           const name = response.result.name;
           localStorage.setItem('loggedIn', 'true');
           localStorage.setItem('name', name);

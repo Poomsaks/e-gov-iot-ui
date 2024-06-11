@@ -52,7 +52,7 @@ export class DashboardComponent implements OnInit {
   chartPie_agriculture_01: any;
   chartPie_agriculture_02: any;
   id_chart: any
-  mac_address_id_chart: { mac_address: any, max_humidity_data: any, min_humidity_data: any, max_temperature_data: any, min_temperature_data: any, average_temperature: any, average_humidity: any , position: any}[] = [];
+  mac_address_id_chart: { mac_address: any, max_humidity_data: any, min_humidity_data: any, max_temperature_data: any, min_temperature_data: any, average_temperature: any, average_humidity: any, position: any }[] = [];
 
   start_datetime: any
   end_datetime: any
@@ -67,7 +67,6 @@ export class DashboardComponent implements OnInit {
     private _alert: AlertFunction,
     private el: ElementRef,
     private renderer: Renderer2,
-
 
   ) {
 
@@ -96,7 +95,7 @@ export class DashboardComponent implements OnInit {
       const dataArray = data.split(',');
       for (let index = 0; index < dataArray.length; index++) {
         const element = dataArray[index];
-        this.mac_address_id_chart.push({ mac_address: element, max_humidity_data: 0, min_humidity_data: 0, max_temperature_data: 0, min_temperature_data: 0, average_temperature: 0, average_humidity: 0 , position: ""});
+        this.mac_address_id_chart.push({ mac_address: element, max_humidity_data: 0, min_humidity_data: 0, max_temperature_data: 0, min_temperature_data: 0, average_temperature: 0, average_humidity: 0, position: "" });
 
       }
     }
@@ -308,19 +307,25 @@ export class DashboardComponent implements OnInit {
     { id: '5', name: "50 นาที" },
     { id: '6', name: "60 นาที" }];
   originalData: any;
+  max_temp: any;
+  min_temp: any;
+  calibrate: any;
   editingRow: number = -1;
 
   editRow(index: number): void {
     this.editingRow = index;
     this.originalData = { ...this.data_position[index] };
   }
-  saveRow(index: number, position: string): void {
+  saveRow(index: number, position: string, max_temp: string, min_temp: string, calibrate: string): void {
     // Save the edited row logic here
     this.editingRow = -1;
     const applicationData = {
       id: index,
       time_notify: this.time_noti_id,
-      position: position
+      position: position,
+      max_temp: max_temp,
+      min_temp: min_temp,
+      calibrate: calibrate
     }
 
     this._serviceService.update_time_notify(applicationData).subscribe((response: any) => {
@@ -394,6 +399,44 @@ export class DashboardComponent implements OnInit {
     const url = this.router.serializeUrl(
       // this.router.createUrlTree(['/meditech-pro/print-chart-date'], { queryParams: { data: applicationDataString } })
       this.router.createUrlTree(['/meditech-pro/print-chart-date'], { queryParams: { data: applicationDataString } })
+    );
+
+    window.open(url, '_blank');
+
+  }
+  // printChartData_v2() {
+  //   const applicationData = {
+  //     start_datetime_chart: this.start_datetime_chart,
+  //     end_datetime_chart: this.end_datetime_chart,
+  //   };
+
+  //   const applicationDataString = JSON.stringify(applicationData);
+  //   console.log("Serialized application data:", applicationDataString);
+
+  //   try {
+  //     const url = this.router.serializeUrl(
+  //       this.router.createUrlTree(['/meditech-pro/print-data-template'], { queryParams: { data: applicationDataString } })
+  //     );
+  //     console.log("Generated URL:", url); // Add this line
+
+  //     const newWindow = window.open(url, '_blank');
+  //     if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
+  //       // Pop-up blocked
+  //       console.error("Pop-up blocked. Please allow pop-ups for this site.");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error creating URL or opening window:", error);
+  //   }
+  // }
+
+  printChartData_v2() {
+    const applicationData = {
+      start_datetime_chart: this.start_datetime_chart,
+      end_datetime_chart: this.end_datetime_chart,
+    }
+    const applicationDataString = JSON.stringify(applicationData);
+    const url = this.router.serializeUrl(
+      this.router.createUrlTree(['/meditech-pro/print-data-template'], { queryParams: { data: applicationDataString } })
     );
 
     window.open(url, '_blank');

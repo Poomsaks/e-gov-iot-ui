@@ -28,13 +28,15 @@ export class ServiceService {
     }, { withCredentials: true });
   }
 
-  get_time_data_by_day(applicationData: any): Observable<any> {
+  get_data_print_day(applicationData: any): Observable<any> {
     const payload = {
       params: {
         mac_address: applicationData.mac_address,
+        start_datetime: applicationData.start_datetime,
+        end_datetime: applicationData.end_datetime,
       }
     };
-    return this.http.post<any>(environment.config.baseConfig.apiUrl + "/api/get_time_data_by_day", payload, { withCredentials: true })
+    return this.http.post<any>(environment.config.baseConfig.apiUrl + "/api/get_data_print_day", payload, { withCredentials: true })
   }
   get_time_data_by_all(applicationData: any): Observable<any> {
     const payload = {
@@ -70,6 +72,9 @@ export class ServiceService {
         id: applicationData.id,
         time_notify: applicationData.time_notify,
         position: applicationData.position,
+        max_temp: applicationData.max_temp,
+        min_temp: applicationData.min_temp,
+        calibrate: applicationData.calibrate
       }
     };
     return this.http.post<any>(environment.config.baseConfig.apiUrl + "/api/update_time_notify", payload, { withCredentials: true })
