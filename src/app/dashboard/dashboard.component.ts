@@ -372,6 +372,7 @@ export class DashboardComponent implements OnInit {
   onSelectorDate() {
     const startDate: any = this.datePipe.transform(this.selectedStartDate, 'yyyy-MM-dd 00:00:00');
     const endDate: any = this.datePipe.transform(this.selectedEndDate, 'yyyy-MM-dd 23:59:59');
+
     if (startDate && endDate) {
       localStorage.setItem('start_datetime', startDate.toString());
       localStorage.setItem('end_datetime', endDate.toString());
@@ -381,8 +382,8 @@ export class DashboardComponent implements OnInit {
 
   goToExcel() {
     const applicationData = {
-      start_datetime_chart: this.start_datetime_chart,
-      end_datetime_chart: this.end_datetime_chart,
+      start_datetime_chart: this.datePipe.transform(this.start_datetime_chart, 'yyyy-MM-dd 00:00:00'),
+      end_datetime_chart: this.datePipe.transform(this.end_datetime_chart, 'yyyy-MM-dd 23:59:59'),
     }
     const applicationDataString = JSON.stringify(applicationData);
     const url = this.router.serializeUrl(
@@ -392,8 +393,8 @@ export class DashboardComponent implements OnInit {
   }
   printChartData() {
     const applicationData = {
-      start_datetime_chart: this.start_datetime_chart,
-      end_datetime_chart: this.end_datetime_chart,
+      start_datetime_chart: this.datePipe.transform(this.start_datetime_chart, 'yyyy-MM-dd 00:00:00'),
+      end_datetime_chart: this.datePipe.transform(this.end_datetime_chart, 'yyyy-MM-dd 23:59:59'),
     }
     const applicationDataString = JSON.stringify(applicationData);
     const url = this.router.serializeUrl(
@@ -431,8 +432,8 @@ export class DashboardComponent implements OnInit {
 
   printChartData_v2() {
     const applicationData = {
-      start_datetime_chart: this.start_datetime_chart,
-      end_datetime_chart: this.end_datetime_chart,
+      start_datetime_chart: this.datePipe.transform(this.start_datetime_chart, 'yyyy-MM-dd 00:00:00'),
+      end_datetime_chart: this.datePipe.transform(this.end_datetime_chart, 'yyyy-MM-dd 23:59:59'),
     }
     const applicationDataString = JSON.stringify(applicationData);
     const url = this.router.serializeUrl(
