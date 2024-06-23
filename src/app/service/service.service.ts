@@ -79,4 +79,12 @@ export class ServiceService {
     };
     return this.http.post<any>(environment.config.baseConfig.apiUrl + "/api/update_time_notify", payload, { withCredentials: true })
   }
+  get_res_users(applicationData: any): Observable<any> {
+    const payload = {
+      params: {
+        name: applicationData.name
+      }
+    };
+    return this.http.post<any>(environment.config.baseConfig.apiUrl + "/api/get_res_users", payload, { withCredentials: true })
+  }
 }

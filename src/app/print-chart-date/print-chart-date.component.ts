@@ -48,19 +48,21 @@ export class PrintChartDateComponent {
   hostpital_name: any;
   address_hostpital: any;
 
+  loading: boolean = false;
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
-
+      this.loading = true; // เริ่มต้นการโหลด
       const data = JSON.parse(params['data']);
-
+      const mac_address_chart = data.mac_address_chart
       if (localStorage.getItem('mac_address')) {
         this.name = localStorage.getItem('name')
         const data: any = localStorage.getItem('mac_address')
         const dataArray = data.split(',');
         for (let index = 0; index < dataArray.length; index++) {
-          const element = dataArray[index];
-          this.mac_address_id_chart.push({ mac_address: element, max_humidity_data: 0, min_humidity_data: 0, max_temperature_data: 0, min_temperature_data: 0, average_temperature: 0, average_humidity: 0 , position: ""});
-
+          if (dataArray[index] === mac_address_chart) {
+            const element = dataArray[index];
+            this.mac_address_id_chart.push({ mac_address: element, max_humidity_data: 0, min_humidity_data: 0, max_temperature_data: 0, min_temperature_data: 0, average_temperature: 0, average_humidity: 0 , position: ""});
+          }
         }
       }
       // this.start_datetime_chart = data.start_datetime_chart
@@ -130,10 +132,10 @@ export class PrintChartDateComponent {
               return of(response);
             })
           ).subscribe(() => {
-
+            this.loading = false; // เมื่อโหลดเสร็จสิ้น
+            // window.print(); // ทำการพิมพ์หลังจากที่ข้อมูลแสดงผลครบทั้งหมด
           });
         }
-
         setTimeout(() => {
               window.print(); // ทำการพิมพ์หลังจากที่ข้อมูลแสดงผลครบทั้งหมด
             }, 500);

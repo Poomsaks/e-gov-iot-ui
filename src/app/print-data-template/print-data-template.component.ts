@@ -79,18 +79,21 @@ export class PrintDataTemplateComponent {
     // console.log('Saving new dataset:', data);
     this.data_all3.push(data);
   }
+  loading: boolean = false;
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
-
+      this.loading = true; // เริ่มต้นการโหลด
       const data = JSON.parse(params['data']);
+      const mac_address_chart = data.mac_address_chart
       if (localStorage.getItem('mac_address')) {
         this.name = localStorage.getItem('name')
         const data: any = localStorage.getItem('mac_address')
         const dataArray = data.split(',');
         for (let index = 0; index < dataArray.length; index++) {
-          const element = dataArray[index];
-          this.mac_address_id_chart.push({ mac_address: element, max_humidity_data: 0, min_humidity_data: 0, max_temperature_data: 0, min_temperature_data: 0, average_temperature: 0, average_humidity: 0, position: "" });
-
+          if (dataArray[index] === mac_address_chart) {
+            const element = dataArray[index];
+            this.mac_address_id_chart.push({ mac_address: element, max_humidity_data: 0, min_humidity_data: 0, max_temperature_data: 0, min_temperature_data: 0, average_temperature: 0, average_humidity: 0, position: "" });
+          }
         }
       }
       const date_chart_start_str: string = data.start_datetime_chart;
@@ -168,6 +171,8 @@ export class PrintDataTemplateComponent {
 
           ).subscribe(() => {
             // คุณสามารถทำการดำเนินการอื่นๆ ได้ที่นี่ถ้าต้องการ
+            this.loading = false; // เมื่อโหลดเสร็จสิ้น
+            // window.print();
           });
         }
         setTimeout(() => {

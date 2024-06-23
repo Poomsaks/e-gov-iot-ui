@@ -26,12 +26,11 @@
     <!-- Main Sidebar Container -->
     <aside class="main-sidebar sidebar-light-primary elevation-4 color_linear_right" data-widget="pushmenu" href="#"
       role="button">
-      <a class="brand-link color_linear_right">
+      <div class="brand-link color_linear_right">
         <!-- <img src="{{images}}" alt="MeditechInsights" style="opacity: .8;width: 10%;"> -->
         <img src="{{images}}" class="img-circle elevation-2" alt="Image" style="width: 23px;margin-left: 18px;">
-        <span class="brand-text font-weight-light" style="margin-left: 10px;">  แจ้งเตือนอุณหภูมิ</span>
-
-      </a>
+        <span class="brand-text font-weight-light" style="margin-left: 10px;"> แจ้งเตือนอุณหภูมิ</span>
+      </div>
       <!-- Sidebar -->
       <div class="sidebar">
         <!-- Sidebar user panel (optional) -->
@@ -40,7 +39,7 @@
             <img src="{{images}}" class="img-circle elevation-2" alt="Image">
           </div>
           <div class="info">
-            <a (click)="goToDDashboard()" class="d-block">{{name}}</a>
+            <span (click)="goToDDashboard()" class="d-block">{{name}}</span>
           </div>
         </div>
 
@@ -136,22 +135,21 @@
                   <div class="row col-12 justify-content-end" style="display: flex; align-items: center;">
                     <div class="card-tools">
                       <div class="btn-group">
-                        <button (click)="printChartData()" type="button"
+                        <button (click)="openModal()" type="button"
                           class="btn btn-default btn-success">พิมพ์</button>
                       </div>
                     </div>
-                    <div class="card-tools">
+                    <!-- <div class="card-tools">
                       <div class="btn-group">
-                        <button (click)="goToExcel()" type="button"
-                          class="btn btn-default btn-success">Excel</button>
+                        <button (click)="openModal()" type="button" class="btn btn-default btn-success">Excel</button>
                       </div>
                     </div>
                     <div class="card-tools">
                       <div class="btn-group">
-                        <button (click)="printChartData_v2()" type="button"
-                          class="btn btn-default btn-success">พิมพ์ Template</button>
+                        <button (click)="openModal()" type="button" class="btn btn-default btn-success">พิมพ์
+                          Template</button>
                       </div>
-                    </div>
+                    </div> -->
                   </div>
                   <div class="row col-12" style="display: flex; align-items: center;">
                     <div class="col-4">
@@ -229,7 +227,7 @@
                         <div class="col-6">
                           <div class="description-block border-right">
                             <span class="description-percentage text-danger"><i class="fas fa-caret-up"></i>
-                              {{item.max_temperature_data}}° C</span>
+                              {{item.max_temperature_data}} %</span>
                             <h5 class="description-header"></h5>
                             <span class="description-text text-gray">ความชื้นสูงสุด</span>
                           </div>
@@ -237,7 +235,7 @@
                         <div class="col-6">
                           <div class="description-block border-right">
                             <span class="description-percentage text-success"><i class="fas fa-caret-down"></i>
-                              {{item.min_temperature_data}}° C</span>
+                              {{item.min_temperature_data}} %</span>
                             <h5 class="description-header"></h5>
                             <span class="description-text text-gray">ความชื้นต่ำสุด</span>
                           </div>
@@ -259,7 +257,7 @@
                         <div class="col-sm-6 col-6">
                           <div class="description-block">
                             <span class="description-percentage text-info"><i class="fas fa-caret-left"></i>
-                              {{item.average_humidity | number: '1.2-2'}}° C </span>
+                              {{item.average_humidity | number: '1.2-2'}} % </span>
                             <h5 class="description-header"></h5>
                             <span class="description-text">ความชื้นเฉลี่ย</span>
                           </div>
@@ -363,7 +361,8 @@
                           <td>
                             <button class="btn btn-sm btn-primary" (click)="editRow(i)"
                               *ngIf="editingRow !== i">Edit</button>
-                            <button class="btn btn-sm btn-success" (click)="saveRow(item.id,item.position,item.max_temp,item.min_temp,item.calibrate)"
+                            <button class="btn btn-sm btn-success"
+                              (click)="saveRow(item.id,item.position,item.max_temp,item.min_temp,item.calibrate)"
                               *ngIf="editingRow === i">Save</button>
                           </td>
                         </tr>
@@ -391,6 +390,50 @@
         <b>Version</b> 0.0.1
       </div>
     </footer>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">กรุณาเลือกเครื่องที่ต้องการ พิมพ์</h1>
+            <button type="button" class="btn-close" (click)="closeModal()" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="table-responsive">
+              <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th>ตำแหน่ง</th>
+                    <th>Mac Address</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of data_position; let i = index">
+                    <td>
+                      <span *ngIf="editingRow !== i">{{ item.position }}</span>
+                      <div *ngIf="editingRow === i">
+                        <input type="text" class="form-control" name="position_add" [(ngModel)]="item.position"
+                          value="{{item.position}}">
+                      </div>
+                    </td>
+                    <td>{{ item.mac_address }}</td>
+                    <td>
+                      <button class="btn btn-sm btn-primary" style="margin-right: 2px;" (click)="printChartData(item.mac_address); closeModal()">พิมพ์</button>
+                      <button class="btn btn-sm btn-primary" style="margin-right: 2px;" (click)="goToExcel(item.mac_address); closeModal()">Excel</button>
+                      <button class="btn btn-sm btn-primary" (click)="printChartData_v2(item.mac_address); closeModal()">Template</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="closeModal()">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   <!-- ./wrapper -->
 </body>

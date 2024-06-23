@@ -1,11 +1,11 @@
 @media print {
-	@page {
-		margin-top: 0;
-		margin-bottom: 0;
+  @page {
     size: landscape;
-	}
-	body {
-		padding-top: 72px;
-		padding-bottom: 72px ;
-	}
+    margin: 0;
+  }
+  body {
+    padding: 0;
+    transform: scale(0.7);
+    transform-origin: top left;
+  }
 }

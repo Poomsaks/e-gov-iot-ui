@@ -88,46 +88,52 @@
       </tr> -->
     </thead>
     <tbody>
-        <th rowspan="2" style="border: 2px solid black;" [hidden]="data_all2.length === 0">อุปกรณ์</th>
-        <tr style="border: 2px solid black;" *ngFor="let item_1 of mac_address_id_chart" [hidden]="data_all2.length === 0">
-          <th style="border: 2px solid black;">วันที่<br>เวลา</th>
-          <ng-container *ngFor="let itemArray of data_all2">
-            <ng-container *ngFor="let item of itemArray">
-              <th style="border: 2px solid black; padding-top: 15px;"><p>{{ item.date | date:'dd/MM' }}<br>{{ item.date | date:'HH:mm' }}</p></th>
-            </ng-container>
+      <th rowspan="2" style="border: 2px solid black;" [hidden]="data_all2.length === 0">อุปกรณ์</th>
+      <tr style="border: 2px solid black;" *ngFor="let item_1 of mac_address_id_chart"
+        [hidden]="data_all2.length === 0">
+        <th style="border: 2px solid black;">วันที่<br>เวลา</th>
+        <ng-container *ngFor="let itemArray of data_all2">
+          <ng-container *ngFor="let item of itemArray">
+            <th style="border: 2px solid black; padding-top: 15px;">
+              <p>{{ item.date | date:'dd/MM' }}<br>{{ item.date | date:'HH:mm' }}</p>
+            </th>
           </ng-container>
-        </tr>
-        <tr style="text-align: center;" *ngFor="let item_1 of mac_address_id_chart" [hidden]="data_all2.length === 0">
+        </ng-container>
+      </tr>
+      <tr style="text-align: center;" *ngFor="let item_1 of mac_address_id_chart" [hidden]="data_all2.length === 0">
 
-          <td style="border: 2px solid black; padding-top: 15px;">
-            <p>{{item_1.mac_address}}</p>
-            <p>{{item_1.position}}</p>
-          </td>
-          <td style="border: 2px solid black; padding-top: 15px;">
-            <p>อุณหภูมิ</p>
-            <p>ความชื้น</p>
-          </td>
+        <td style="border: 2px solid black; padding-top: 15px;">
+          <p>{{item_1.mac_address}}</p>
+          <p>{{item_1.position}}</p>
+        </td>
+        <td style="border: 2px solid black; padding-top: 15px;">
+          <p>อุณหภูมิ</p>
+          <p>ความชื้น</p>
+        </td>
 
-          <!-- วนลูปเพื่อแสดงข้อมูลของแต่ละวันในแต่ละอุปกรณ์ -->
-          <ng-container *ngFor="let itemArray of data_all2">
-            <!-- วนลูปเพื่อแสดงข้อมูลของแต่ละวัน -->
-            <ng-container *ngFor="let item of itemArray">
-              <!-- ตรวจสอบว่าข้อมูลเป็นของอุปกรณ์เดียวกันหรือไม่ -->
-              <td style="border: 2px solid black; padding-top: 15px;" *ngIf="item.mac_address === item_1.mac_address">
-                <p> {{ item.temperature }} </p>
-                <p> {{ item.humidity }} </p>
-              </td>
-            </ng-container>
+        <!-- วนลูปเพื่อแสดงข้อมูลของแต่ละวันในแต่ละอุปกรณ์ -->
+        <ng-container *ngFor="let itemArray of data_all2">
+          <!-- วนลูปเพื่อแสดงข้อมูลของแต่ละวัน -->
+          <ng-container *ngFor="let item of itemArray">
+            <!-- ตรวจสอบว่าข้อมูลเป็นของอุปกรณ์เดียวกันหรือไม่ -->
+            <td style="border: 2px solid black; padding-top: 15px;" *ngIf="item.mac_address === item_1.mac_address">
+              <p> {{ item.temperature }} </p>
+              <p> {{ item.humidity }} </p>
+            </td>
           </ng-container>
-        </tr>
+        </ng-container>
+      </tr>
 
 
       <th rowspan="2" style="border: 2px solid black;" [hidden]="data_all3.length === 0">อุปกรณ์</th>
-      <tr style="border: 2px solid black;" *ngFor="let item_1 of mac_address_id_chart" [hidden]="data_all3.length === 0">
+      <tr style="border: 2px solid black;" *ngFor="let item_1 of mac_address_id_chart"
+        [hidden]="data_all3.length === 0">
         <th style="border: 2px solid black;">วันที่<br>เวลา</th>
         <ng-container *ngFor="let itemArray of data_all3">
           <ng-container *ngFor="let item of itemArray">
-            <th style="border: 2px solid black; padding-top: 15px;"><p>{{ item.date | date:'dd/MM' }}<br>{{ item.date | date:'HH:mm' }}</p></th>
+            <th style="border: 2px solid black; padding-top: 15px;">
+              <p>{{ item.date | date:'dd/MM' }}<br>{{ item.date | date:'HH:mm' }}</p>
+            </th>
           </ng-container>
         </ng-container>
       </tr>
@@ -159,7 +165,9 @@
         <th style="border: 2px solid black; ">วันที่<br>เวลา</th>
         <ng-container *ngFor="let itemArray of data_all">
           <ng-container *ngFor="let item of itemArray">
-            <th style="border: 2px solid black; padding-top: 15px;"><p>{{ item.date | date:'dd/MM' }}<br>{{ item.date | date:'HH:mm' }}</p></th>
+            <th style="border: 2px solid black; padding-top: 15px;">
+              <p>{{ item.date | date:'dd/MM' }}<br>{{ item.date | date:'HH:mm' }}</p>
+            </th>
           </ng-container>
         </ng-container>
       </tr>
@@ -191,6 +199,10 @@
   </table>
   <br>
   <p><strong>บันทึกเวลา:</strong> 09.00 น. และ 15.00 น.</p>
-  <p><strong>อุณหภูมิภายในช่องธรรมดา:</strong> (+2 °C ถึง +8 °)
-  <p style="text-align: right;"><strong>ลงชื่อ:..........................................</strong>
-  <p style="text-align: right;"><strong>ผู้ประเมิน:..........................................</strong>
+  <p style="margin-bottom: 20px;"> <strong>อุณหภูมิภายในช่องธรรมดา:</strong> (+2 °C ถึง +8 °)
+    <br>
+    <br>
+  <div style="margin-bottom: 20px;">
+    <strong>ลงชื่อ:..........................................</strong></div>
+  <div>
+    <strong>ผู้ประเมิน:..........................................</strong></div>

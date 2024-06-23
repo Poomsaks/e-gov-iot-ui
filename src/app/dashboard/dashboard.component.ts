@@ -1,13 +1,12 @@
-import { ChangeDetectorRef, Component, ElementRef, HostListener, NgModule, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, Renderer2 } from '@angular/core';
 import { ServiceService } from '../service/service.service';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import Chart, { ChartData, ChartItem } from 'chart.js/auto';
+import Chart, { ChartItem } from 'chart.js/auto';
 import { AlertFunction } from '../alert/Alert_function';
-import { concat, of, switchMap } from 'rxjs';
-import { SessionStorageService } from '../interface/session-storage.service';
+import { of, switchMap } from 'rxjs';
 import { DatePipe } from '@angular/common';
-import { ExportAsConfig, ExportAsService } from 'ngx-export-as';
+import { Modal } from 'bootstrap'
 
 @Component({
   selector: 'dashboard',
@@ -66,8 +65,7 @@ export class DashboardComponent implements OnInit {
     private router: Router,
     private _alert: AlertFunction,
     private el: ElementRef,
-    private renderer: Renderer2,
-
+    private renderer: Renderer2
   ) {
 
     if (localStorage.getItem('name')) {
@@ -380,8 +378,9 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  goToExcel() {
+  goToExcel(mac_address: any) {
     const applicationData = {
+      mac_address_chart: mac_address,
       start_datetime_chart: this.datePipe.transform(this.start_datetime_chart, 'yyyy-MM-dd 00:00:00'),
       end_datetime_chart: this.datePipe.transform(this.end_datetime_chart, 'yyyy-MM-dd 23:59:59'),
     }
@@ -390,9 +389,32 @@ export class DashboardComponent implements OnInit {
       this.router.createUrlTree(['/meditech-pro/export-excel'], { queryParams: { data: applicationDataString } })
     );
     window.open(url, '_blank');
+    // this.router.navigate(['/export-excel'], { queryParams: { data: applicationDataString } });
   }
-  printChartData() {
+  private modalInstance: Modal | undefined;
+
+  ngAfterViewInit() {
+    const modalElement = document.getElementById('exampleModal');
+    if (modalElement) {
+      this.modalInstance = new Modal(modalElement);
+    }
+  }
+
+  openModal(): void {
+    if (this.modalInstance) {
+      this.modalInstance.show();
+    }
+  }
+
+  closeModal(): void {
+    if (this.modalInstance) {
+      this.modalInstance.hide();
+    }
+  }
+
+  printChartData(mac_address: any) {
     const applicationData = {
+      mac_address_chart: mac_address,
       start_datetime_chart: this.datePipe.transform(this.start_datetime_chart, 'yyyy-MM-dd 00:00:00'),
       end_datetime_chart: this.datePipe.transform(this.end_datetime_chart, 'yyyy-MM-dd 23:59:59'),
     }
@@ -403,6 +425,7 @@ export class DashboardComponent implements OnInit {
     );
 
     window.open(url, '_blank');
+    // this.router.navigate(['/print-chart-date'], { queryParams: { data: applicationDataString } });
 
   }
   // printChartData_v2() {
@@ -430,8 +453,9 @@ export class DashboardComponent implements OnInit {
   //   }
   // }
 
-  printChartData_v2() {
+  printChartData_v2(mac_address: any) {
     const applicationData = {
+      mac_address_chart: mac_address,
       start_datetime_chart: this.datePipe.transform(this.start_datetime_chart, 'yyyy-MM-dd 00:00:00'),
       end_datetime_chart: this.datePipe.transform(this.end_datetime_chart, 'yyyy-MM-dd 23:59:59'),
     }
@@ -441,6 +465,7 @@ export class DashboardComponent implements OnInit {
     );
 
     window.open(url, '_blank');
+    // this.router.navigate(['/print-data-template'], { queryParams: { data: applicationDataString } });
 
   }
 }
