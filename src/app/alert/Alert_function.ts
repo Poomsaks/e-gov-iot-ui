@@ -34,7 +34,7 @@ export class AlertFunction {
     Swal.fire('ยกเลิก', ' ', 'error');
   }
   invalid_user_pass() {
-    Swal.fire('ชื่อผู็ใช้หรือรหัสผ่านไม่ถูกต้อง', ' ', 'error');
+    Swal.fire('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง', ' ', 'error');
   }
 
   warning_out(part_in : string,part_out : string) {
