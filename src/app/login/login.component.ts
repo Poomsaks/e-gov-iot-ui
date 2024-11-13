@@ -87,32 +87,3 @@ export class LoginComponent {
     });
   }
 }
-// this._serviceService.get_time_data(applicationData).subscribe((response: any) => {
-//   const address = response.result.response.mac_address
-//   console.log(response.result.response.mac_address)
-//   const mac_address = {
-//     mac_address: address,
-//   };
-//   // this._serviceService.get_time_data_by_day(mac_address).subscribe((response: any) => {
-//   //   sessionStorage.setItem('temperature', response.result.temperature);
-//   //   sessionStorage.setItem('humidity', response.result.humidity);
-//   //   sessionStorage.setItem('date_data', response.result.date_data);
-
-//   // });
-//   // this.router.navigate(['/dashboard']);
-// });
-
-
-
-// try {
-//   const response = await this._serviceService.get_time_data(applicationData).toPromise();
-//   // sessionStorage.setItem('response', JSON.stringify(response));
-//   // const userData = { response: response.result.response };
-//   this.interfaceService.setUserData(response);
-//   // console.log('Error:', response);
-//   // ทำงานเมื่อทุกอย่างเสร็จสมบูรณ์
-//   this.router.navigate(['/dashboard']);
-// } catch (error) {
-//   // จัดการข้อผิดพลาด
-//   console.error('Error:', error);
-// }
