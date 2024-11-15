@@ -20,13 +20,20 @@ export class ServiceService {
     }, { withCredentials: true });
   }
   authenticate_iot(applicationData: any): Observable<any> {
-    return this.http.post<any>(environment.config.baseConfig.apiUrl + "/api/authenticate_iot", {
-      params: {
-        login: applicationData.login,
-        password: applicationData.password,
-      }
-    }, { withCredentials: true });
+    return this.http.post<any>(`${environment.config.baseConfig.apiUrl}/api/authenticate_iot`, {
+      login: applicationData.login,
+      password: applicationData.password,
+    });
   }
+
+  // authenticate_iot(applicationData: any): Observable<any> {
+  //   return this.http.post<any>(environment.config.baseConfig.apiUrl + "/api/authenticate_iot", {
+  //     params: {
+  //       login: applicationData.login,
+  //       password: applicationData.password,
+  //     }
+  //   }, { withCredentials: true });
+  // }
 
   get_data_print_day(applicationData: any): Observable<any> {
     const payload = {

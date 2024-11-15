@@ -77,13 +77,15 @@
           "defaultConfiguration": "production"
         },
         "serve": {
+          "options": { "proxyConfig": "src/proxy.conf.json"},
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
               "browserTarget": "e-gov-iot-ui:build:production"
             },
             "development": {
-              "browserTarget": "e-gov-iot-ui:build:development"
+              "browserTarget": "e-gov-iot-ui:build:development",
+              "proxyConfig": "src/proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"
