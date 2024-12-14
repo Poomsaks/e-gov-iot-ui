@@ -46,27 +46,17 @@ export class LoginComponent {
 
     // บันทึกข้อมูลลง database
     this._serviceService.authenticate_iot(formattedData).subscribe(async (response: any) => {
-      // console.log('Authentication Response:', response);
-      if (response.result) {
-        if (response.result.uid) {
-          const name = response.result.name;
+      if (response.session) {
+        if (response.session.username) {
+          const name = response.session.username;
           localStorage.setItem('loggedIn', 'true');
           localStorage.setItem('name', name);
-
-
-          const name_user = {
-            name: name,
-          };
-          this._serviceService.get_res_users(name_user).subscribe((response: any) => {
-            this.name_user = response.result[0].name;
-          });
-
+          this.name_user = name
           const applicationData = {
             mac_address: name,
           };
-
           this._serviceService.get_time_data(applicationData).subscribe((response: any) => {
-            const address = response.result.response
+            const address = response.response
             for (let index = 0; index < address.length; index++) {
               const element_1 = address[index].mac_address;
               this.mac_address_data.push(element_1);

@@ -10,19 +10,10 @@ export class ServiceService {
 
   constructor(private http: HttpClient) { }
 
-  authenticate(): Observable<any> {
-    return this.http.post<any>(environment.config.baseConfig.apiUrl + "/web/session/authenticate", {
-      params: {
-        login: environment.config.baseConfig.userServer,
-        password: environment.config.baseConfig.passServer,
-        db: environment.config.baseConfig.dbServer,
-      }
-    }, { withCredentials: true });
-  }
   authenticate_iot(applicationData: any): Observable<any> {
-    return this.http.post<any>(environment.config.baseConfig.apiUrl + "/api/authenticate_iot", {
+    return this.http.post<any>(environment.config.baseConfig.apiUrl + "/authenticate_iot", {
       params: {
-        login: applicationData.login,
+        username: applicationData.login,
         password: applicationData.password,
       }
     }, { withCredentials: true });
@@ -36,7 +27,7 @@ export class ServiceService {
         end_datetime: applicationData.end_datetime,
       }
     };
-    return this.http.post<any>(environment.config.baseConfig.apiUrl + "/api/get_data_print_day", payload, { withCredentials: true })
+    return this.http.post<any>(environment.config.baseConfig.apiUrl + "/get_data_print_day", payload, { withCredentials: true })
   }
   get_time_data_by_all(applicationData: any): Observable<any> {
     const payload = {
@@ -46,7 +37,7 @@ export class ServiceService {
         end_datetime: applicationData.end_datetime,
       }
     };
-    return this.http.post<any>(environment.config.baseConfig.apiUrl + "/api/get_time_data_by_all", payload, { withCredentials: true })
+    return this.http.post<any>(environment.config.baseConfig.apiUrl + "/get_time_data_by_all", payload, { withCredentials: true })
   }
   get_time_data(applicationData: any): Observable<any> {
     const payload = {
@@ -54,7 +45,7 @@ export class ServiceService {
         mac_address: applicationData.mac_address,
       }
     };
-    return this.http.post<any>(environment.config.baseConfig.apiUrl + "/api/get_time_data", payload, { withCredentials: true })
+    return this.http.post<any>(environment.config.baseConfig.apiUrl + "/get_time_data", payload, { withCredentials: true })
   }
   get_time_data_excel(applicationData: any): Observable<any> {
     const payload = {
@@ -64,7 +55,7 @@ export class ServiceService {
         end_datetime: applicationData.end_datetime,
       }
     };
-    return this.http.post<any>(environment.config.baseConfig.apiUrl + "/api/get_time_data_excel", payload, { withCredentials: true })
+    return this.http.post<any>(environment.config.baseConfig.apiUrl + "/get_time_data_excel", payload, { withCredentials: true })
   }
   update_time_notify(applicationData: any): Observable<any> {
     const payload = {
@@ -72,12 +63,18 @@ export class ServiceService {
         id: applicationData.id,
         time_notify: applicationData.time_notify,
         position: applicationData.position,
-        max_temp: applicationData.max_temp,
-        min_temp: applicationData.min_temp,
-        calibrate: applicationData.calibrate
+        max_temp_sensor_1: applicationData.max_temp_sensor_1,
+        max_temp_sensor_2: applicationData.max_temp_sensor_2,
+        max_temp_sensor_3: applicationData.max_temp_sensor_3,
+        min_temp_sensor_1: applicationData.min_temp_sensor_1,
+        min_temp_sensor_2: applicationData.min_temp_sensor_2,
+        min_temp_sensor_3: applicationData.min_temp_sensor_3,
+        calibrate_sensor_1: applicationData.calibrate_sensor_1,
+        calibrate_sensor_2: applicationData.calibrate_sensor_2,
+        calibrate_sensor_3: applicationData.calibrate_sensor_3
       }
     };
-    return this.http.post<any>(environment.config.baseConfig.apiUrl + "/api/update_time_notify", payload, { withCredentials: true })
+    return this.http.post<any>(environment.config.baseConfig.apiUrl + "/update_time_notify", payload, { withCredentials: true })
   }
   get_res_users(applicationData: any): Observable<any> {
     const payload = {
@@ -85,6 +82,6 @@ export class ServiceService {
         name: applicationData.name
       }
     };
-    return this.http.post<any>(environment.config.baseConfig.apiUrl + "/api/get_res_users", payload, { withCredentials: true })
+    return this.http.post<any>(environment.config.baseConfig.apiUrl + "/get_res_users", payload, { withCredentials: true })
   }
 }

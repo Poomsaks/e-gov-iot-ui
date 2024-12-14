@@ -64,9 +64,9 @@ export class ExportExcelComponent {
         mac_address: this.name,
       }
       this._serviceService.get_time_data(applicationData).subscribe((response: any) => {
-        this.data_position = response.result.response
-        this.hostpital_name = response.result.response[0].name
-        this.address_hostpital = response.result.response[0].address
+        this.data_position = response.response
+        this.hostpital_name = response.response[0].name
+        this.address_hostpital = response.response[0].address
         for (let index = 0; index < this.data_position.length; index++) {
           const element = this.data_position[index].mac_address;
           const position = this.data_position[index].position;
@@ -87,15 +87,15 @@ export class ExportExcelComponent {
           }
           this._serviceService.get_time_data_excel(paramData).pipe(
             switchMap((response: any) => {
-              const temperature = response.result.temperature;
-              const humidity = response.result.humidity;
-              const date_data = response.result.date_data;
-              const max_humidity_data = response.result.max_humidity_data;
-              const min_humidity_data = response.result.min_humidity_data;
-              const max_temperature_data = response.result.max_temperature_data;
-              const min_temperature_data = response.result.min_temperature_data;
-              const average_temperature = response.result.average_temperature;
-              const average_humidity = response.result.average_humidity;
+              const temperature = response.temperature;
+              const humidity = response.humidity;
+              const date_data = response.date_data;
+              const max_humidity_data = response.max_humidity_data;
+              const min_humidity_data = response.min_humidity_data;
+              const max_temperature_data = response.max_temperature_data;
+              const min_temperature_data = response.min_temperature_data;
+              const average_temperature = response.average_temperature;
+              const average_humidity = response.average_humidity;
               const indexOfObjectToUpdate = this.mac_address_id_chart.findIndex(item => item.mac_address === element);
 
               if (indexOfObjectToUpdate !== -1) {

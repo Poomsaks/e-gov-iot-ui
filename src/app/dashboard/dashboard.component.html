@@ -135,8 +135,7 @@
                   <div class="row col-12 justify-content-end" style="display: flex; align-items: center;">
                     <div class="card-tools">
                       <div class="btn-group">
-                        <button (click)="openModal()" type="button"
-                          class="btn btn-default btn-success">พิมพ์</button>
+                        <button (click)="openModal()" type="button" class="btn btn-default btn-success">พิมพ์</button>
                       </div>
                     </div>
                     <!-- <div class="card-tools">
@@ -267,8 +266,6 @@
                       <!-- /.row -->
                     </div>
                   </div>
-
-
                   <!-- /.row -->
                 </div>
 
@@ -305,9 +302,15 @@
                         <tr>
                           <th>ชื่อโรงพยาบาล</th>
                           <th>ตำแหน่งที่ติดตั้ง</th>
-                          <th>อุณหภูมิสูงสุด</th>
-                          <th>อุณหภูมิต่ำสุด</th>
-                          <th>Calibrate</th>
+                          <!-- <th>อุณหภูมิสูงสุด s1</th>
+                          <th>อุณหภูมิต่ำสุด s1</th>
+                          <th>อุณหภูมิสูงสุด s2</th>
+                          <th>อุณหภูมิต่ำสุด s2</th>
+                          <th>อุณหภูมิสูงสุด s3</th>
+                          <th>อุณหภูมิต่ำสุด s3</th>
+                          <th>Calibrate s1</th>
+                          <th>Calibrate s2</th>
+                          <th>Calibrate s3</th> -->
                           <th>Mac Address</th>
                           <th>เวลาที่ส่งแจ้งเตือน</th>
                           <th>Action</th>
@@ -317,53 +320,103 @@
                         <tr *ngFor="let item of data_position; let i = index">
                           <td>{{ item.name }}</td>
                           <td>
-                            <span *ngIf="editingRow !== i">{{ item.position }}</span>
-                            <div *ngIf="editingRow === i">
+                            <span>{{ item.position }}</span>
+                            <!-- <span *ngIf="editingRow !== i">{{ item.position }}</span> -->
+                            <!-- <div *ngIf="editingRow === i">
                               <input type="text" class="form-control" name="position_add" [(ngModel)]="item.position"
                                 value="{{item.position}}">
-                            </div>
+                            </div> -->
                           </td>
 
-                          <td>
-                            <span *ngIf="editingRow !== i">{{ item.max_temp }}</span>
+                          <!-- <td>
+                            <span *ngIf="editingRow !== i">{{ item.max_temp_sensor_1 }}</span>
                             <div *ngIf="editingRow === i">
-                              <input type="text" class="form-control" name="max_temp" [(ngModel)]="item.max_temp"
-                                value="{{item.max_temp}}">
+                              <input type="text" class="form-control" name="max_temp_sensor_1" [(ngModel)]="item.max_temp_sensor_1"
+                                value="{{item.max_temp_sensor_1}}">
                             </div>
                           </td>
                           <td>
-                            <span *ngIf="editingRow !== i">{{ item.min_temp }}</span>
+                            <span *ngIf="editingRow !== i">{{ item.min_temp_sensor_1 }}</span>
                             <div *ngIf="editingRow === i">
-                              <input type="text" class="form-control" name="min_temp" [(ngModel)]="item.min_temp"
-                                value="{{item.min_temp}}">
+                              <input type="text" class="form-control" name="min_temp_sensor_1" [(ngModel)]="item.min_temp_sensor_1"
+                                value="{{item.min_temp_sensor_1}}">
                             </div>
                           </td>
-
                           <td>
-                            <span *ngIf="editingRow !== i">{{ item.calibrate }}</span>
+                            <span *ngIf="editingRow !== i">{{ item.max_temp_sensor_2 }}</span>
                             <div *ngIf="editingRow === i">
-                              <input type="text" class="form-control" name="calibrate" [(ngModel)]="item.calibrate"
-                                value="{{item.calibrate}}">
+                              <input type="text" class="form-control" name="max_temp_sensor_2" [(ngModel)]="item.max_temp_sensor_2"
+                                value="{{item.max_temp_sensor_2}}">
                             </div>
                           </td>
+                          <td>
+                            <span *ngIf="editingRow !== i">{{ item.min_temp_sensor_2 }}</span>
+                            <div *ngIf="editingRow === i">
+                              <input type="text" class="form-control" name="min_temp_sensor_2" [(ngModel)]="item.min_temp_sensor_2"
+                                value="{{item.min_temp_sensor_2}}">
+                            </div>
+                          </td>
+                          <td>
+                            <span *ngIf="editingRow !== i">{{ item.max_temp_sensor_3 }}</span>
+                            <div *ngIf="editingRow === i">
+                              <input type="text" class="form-control" name="max_temp_sensor_3" [(ngModel)]="item.max_temp_sensor_3"
+                                value="{{item.max_temp_sensor_3}}">
+                            </div>
+                          </td>
+                          <td>
+                            <span *ngIf="editingRow !== i">{{ item.min_temp_sensor_3 }}</span>
+                            <div *ngIf="editingRow === i">
+                              <input type="text" class="form-control" name="min_temp_sensor_3" [(ngModel)]="item.min_temp_sensor_3"
+                                value="{{item.min_temp_sensor_3}}">
+                            </div>
+                          </td>
+                          <td>
+                            <span *ngIf="editingRow !== i">{{ item.calibrate_sensor_1 }}</span>
+                            <div *ngIf="editingRow === i">
+                              <input type="text" class="form-control" name="calibrate_sensor_1" [(ngModel)]="item.calibrate_sensor_1"
+                                value="{{item.calibrate_sensor_1}}">
+                            </div>
+                          </td>
+                          <td>
+                            <span *ngIf="editingRow !== i">{{ item.calibrate_sensor_2 }}</span>
+                            <div *ngIf="editingRow === i">
+                              <input type="text" class="form-control" name="calibrate_sensor_2" [(ngModel)]="item.calibrate_sensor_2"
+                                value="{{item.calibrate_sensor_2}}">
+                            </div>
+                          </td>
+                          <td>
+                            <span *ngIf="editingRow !== i">{{ item.calibrate_sensor_3 }}</span>
+                            <div *ngIf="editingRow === i">
+                              <input type="text" class="form-control" name="calibrate_sensor_3" [(ngModel)]="item.calibrate_sensor_3"
+                                value="{{item.calibrate_sensor_3}}">
+                            </div>
+                          </td> -->
 
                           <!-- <td>{{ item.position }}</td> -->
                           <td>{{ item.mac_address }}</td>
                           <td>
-                            <span *ngIf="editingRow !== i">{{ item.time_notify }}</span>
+                            <span *ngIf="item.time_notify === '1'">10 นาที</span>
+                            <span *ngIf="item.time_notify === '2'">20 นาที</span>
+                            <span *ngIf="item.time_notify === '3'">30 นาที</span>
+                            <span *ngIf="item.time_notify === '4'">40 นาที</span>
+                            <span *ngIf="item.time_notify === '5'">50 นาที</span>
+                            <span *ngIf="item.time_notify === '6'">60 นาที</span>
+                            <!-- <span *ngIf="editingRow !== i">{{ item.time_notify }}</span>
                             <div *ngIf="editingRow === i">
                               <select [(ngModel)]="item.time_notify " (change)="onSelectedTime($event)">
                                 <option *ngFor="let option of time_notify" [ngValue]="option.name">{{ option.name }}
                                 </option>
                               </select>
-                            </div>
+                            </div> -->
                           </td>
                           <td>
-                            <button class="btn btn-sm btn-primary" (click)="editRow(i)"
+                            <button (click)="openModalNotify(i)" type="button"
+                              class="btn btn-sm btn-primary">แก้ไข</button>
+                            <!-- <button class="btn btn-sm btn-primary" (click)="editRow(i)"
                               *ngIf="editingRow !== i">Edit</button>
                             <button class="btn btn-sm btn-success"
                               (click)="saveRow(item.id,item.position,item.max_temp,item.min_temp,item.calibrate)"
-                              *ngIf="editingRow === i">Save</button>
+                              *ngIf="editingRow === i">Save</button> -->
                           </td>
                         </tr>
                       </tbody>
@@ -411,17 +464,21 @@
                 <tbody>
                   <tr *ngFor="let item of data_position; let i = index">
                     <td>
-                      <span *ngIf="editingRow !== i">{{ item.position }}</span>
+                      <span>{{ item.position }}</span>
+                      <!-- <span *ngIf="editingRow !== i">{{ item.position }}</span>
                       <div *ngIf="editingRow === i">
                         <input type="text" class="form-control" name="position_add" [(ngModel)]="item.position"
                           value="{{item.position}}">
-                      </div>
+                      </div> -->
                     </td>
                     <td>{{ item.mac_address }}</td>
                     <td>
-                      <button class="btn btn-sm btn-primary" style="margin-right: 2px;" (click)="printChartData(item.mac_address); closeModal()">พิมพ์</button>
-                      <button class="btn btn-sm btn-primary" style="margin-right: 2px;" (click)="goToExcel(item.mac_address); closeModal()">Excel</button>
-                      <button class="btn btn-sm btn-primary" (click)="printChartData_v2(item.mac_address); closeModal()">Template</button>
+                      <button class="btn btn-sm btn-primary" style="margin-right: 2px;"
+                        (click)="printChartData(item.mac_address); closeModal()">พิมพ์</button>
+                      <button class="btn btn-sm btn-primary" style="margin-right: 2px;"
+                        (click)="goToExcel(item.mac_address); closeModal()">Excel</button>
+                      <button class="btn btn-sm btn-primary"
+                        (click)="printChartData_v2(item.mac_address); closeModal()">Template</button>
                     </td>
                   </tr>
                 </tbody>
@@ -429,11 +486,106 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" (click)="closeModal()">Close</button>
+            <button type="button" class="btn btn-secondary" (click)="closeModal()">ยกเลิก</button>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- Modal 2-->
+    <div class="modal fade" id="editNotify" tabindex="-1" aria-labelledby="editNotifyLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="editNotifyLabel">ตั้งค่าอุปกรณ์</h1>
+            <button type="button" class="btn-close" (click)="closeModalNotify()" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="col-12">
+                  <label for="sensor1" style="font-weight: normal;">ตำแหน่งที่ตั้ง:</label>
+                  <input type="text" class="form-control" [(ngModel)]="position">
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="col-12">
+                  <label for="timeNotify" style="font-weight: normal;">เวลาที่ส่งแจ้งเตือน:</label>
+                  <select id="timeNotify" class="form-control" [(ngModel)]="selectedTimeNotify">
+                    <option *ngFor="let time of time_notify" [value]="time.id">
+                      {{ time.name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+
+
+
+
+              <!-- ตั้งค่าจุดสูงสุด และ จุดต่ำสุด -->
+              <div class="col-md-6">
+                <label class="mt-3">ตั้งค่าจุดสูงสุด และ จุดต่ำสุด ของอุปกรณ์</label>
+                <div class="row mt-2" style="margin: 1px;">
+                  <div class="col-6">
+                    <label for="sensor1" style="font-weight: normal;">Max Temp Sensor 1:</label>
+                    <input type="text" class="form-control" [(ngModel)]="max_temp_sensor_1">
+                  </div>
+                  <div class="col-6">
+                    <label for="sensor1" style="font-weight: normal;">Min Temp Sensor 1:</label>
+                    <input type="text" class="form-control" [(ngModel)]="min_temp_sensor_1">
+                  </div>
+                </div>
+                <div class="row mt-2" style="margin: 1px;">
+                  <div class="col-6">
+                    <label for="sensor2" style="font-weight: normal;">Max Temp Sensor 2:</label>
+                    <input type="text" class="form-control" [(ngModel)]="max_temp_sensor_2">
+                  </div>
+                  <div class="col-6">
+                    <label for="sensor2" style="font-weight: normal;">Min Temp Sensor 2:</label>
+                    <input type="text" class="form-control" [(ngModel)]="min_temp_sensor_2">
+                  </div>
+                </div>
+                <div class="row mt-2" style="margin: 1px;">
+                  <div class="col-6">
+                    <label for="sensor3" style="font-weight: normal;">Max Temp Sensor 3:</label>
+                    <input type="text" class="form-control" [(ngModel)]="max_temp_sensor_3">
+                  </div>
+                  <div class="col-6">
+                    <label for="sensor3" style="font-weight: normal;">Min Temp Sensor 3:</label>
+                    <input type="text" class="form-control" [(ngModel)]="min_temp_sensor_3">
+                  </div>
+                </div>
+              </div>
+              <!-- ตั้งค่า Calibrate -->
+              <div class="col-md-6">
+                <label class="mt-3">ตั้งค่า Calibrate</label>
+                <div class="row mt-2" style="margin: 1px;">
+                  <div class="col-6">
+                    <label for="sensor1" style="font-weight: normal;">Calibrate Sensor 1:</label>
+                    <input type="text" class="form-control" [(ngModel)]="calibrate_sensor_1">
+                  </div>
+                  <div class="col-6">
+                    <label for="sensor2" style="font-weight: normal;">Calibrate Sensor 2:</label>
+                    <input type="text" class="form-control" [(ngModel)]="calibrate_sensor_2">
+                  </div>
+                </div>
+                <div class="row mt-2" style="margin: 1px;">
+                  <div class="col-12">
+                    <label for="sensor3" style="font-weight: normal;">Calibrate Sensor 3:</label>
+                    <input type="text" class="form-control" [(ngModel)]="calibrate_sensor_3">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="saveNotify()">บันทึก</button>
+            <button type="button" class="btn btn-secondary" (click)="closeModalNotify()">ยกเลิก</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
   <!-- ./wrapper -->
 </body>
