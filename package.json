@@ -7,7 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "prod": "node --max_old_space_size=94096 ./node_modules/@angular/cli/bin/ng build --configuration=production --base-href /meditech-pro/"
+    "prod": "node --max_old_space_size=94096 ./node_modules/@angular/cli/bin/ng build --configuration=production --base-href /qm-temp/"
   },
   "private": true,
   "dependencies": {

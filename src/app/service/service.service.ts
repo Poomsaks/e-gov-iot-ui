@@ -35,6 +35,7 @@ export class ServiceService {
         mac_address: applicationData.mac_address,
         start_datetime: applicationData.start_datetime,
         end_datetime: applicationData.end_datetime,
+        type_board:applicationData.type_board
       }
     };
     return this.http.post<any>(environment.config.baseConfig.apiUrl + "/get_time_data_by_all", payload, { withCredentials: true })

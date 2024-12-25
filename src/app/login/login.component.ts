@@ -15,6 +15,7 @@ export class LoginComponent {
   mac_address!: string;
   password!: string;
   mac_address_data: any[] = [];
+  type_board_data: any[] = [];
   images: any;
   name_user!: String;
   constructor(
@@ -47,8 +48,10 @@ export class LoginComponent {
     // บันทึกข้อมูลลง database
     this._serviceService.authenticate_iot(formattedData).subscribe(async (response: any) => {
       if (response.session) {
-        if (response.session.username) {
-          const name = response.session.username;
+        console.log('response.session', response.session);
+
+        if (response.session.mac_address) {
+          const name = response.session.mac_address;
           localStorage.setItem('loggedIn', 'true');
           localStorage.setItem('name', name);
           this.name_user = name
@@ -59,11 +62,14 @@ export class LoginComponent {
             const address = response.response
             for (let index = 0; index < address.length; index++) {
               const element_1 = address[index].mac_address;
+              const element_2 = address[index].type_board;
               this.mac_address_data.push(element_1);
+              this.type_board_data.push(element_2)
               this.images = address[index].image;
             }
             localStorage.setItem('images', this.images.toString());
             localStorage.setItem('mac_address', this.mac_address_data.toString());
+            localStorage.setItem('type_board', this.type_board_data.toString());
             this.router.navigate(['/dashboard']);
           });
         } else {

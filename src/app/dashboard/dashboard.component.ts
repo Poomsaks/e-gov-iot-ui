@@ -51,7 +51,7 @@ export class DashboardComponent implements OnInit {
   chartPie_agriculture_01: any;
   chartPie_agriculture_02: any;
   id_chart: any
-  mac_address_id_chart: { mac_address: any, max_humidity_data: any, min_humidity_data: any, max_temperature_data: any, min_temperature_data: any, average_temperature: any, average_humidity: any, position: any }[] = [];
+  mac_address_id_chart: { mac_address: any, max_humidity_data: any, min_humidity_data: any, max_temperature_data: any, min_temperature_data: any, average_temperature: any, average_humidity: any, position: any, type_board: any }[] = [];
 
   start_datetime: any
   end_datetime: any
@@ -60,6 +60,7 @@ export class DashboardComponent implements OnInit {
   end_datetime_chart!: Date;
 
   images: any;
+  type_board: any;
   constructor(private _serviceService: ServiceService,
     private http: HttpClient,
     private router: Router,
@@ -90,11 +91,14 @@ export class DashboardComponent implements OnInit {
     if (localStorage.getItem('mac_address')) {
       // console.log(localStorage.getItem('mac_address'))
       const data: any = localStorage.getItem('mac_address')
+      const typeDataBoard: any = localStorage.getItem('type_board')
       const dataArray = data.split(',');
+      const splitTypeBoard = typeDataBoard.split(',');
+
       for (let index = 0; index < dataArray.length; index++) {
         const element = dataArray[index];
-        this.mac_address_id_chart.push({ mac_address: element, max_humidity_data: 0, min_humidity_data: 0, max_temperature_data: 0, min_temperature_data: 0, average_temperature: 0, average_humidity: 0, position: "" });
-
+        const type_board_element = splitTypeBoard[index];
+        this.mac_address_id_chart.push({ mac_address: element, max_humidity_data: 0, min_humidity_data: 0, max_temperature_data: 0, min_temperature_data: 0, average_temperature: 0, average_humidity: 0, position: "", type_board: type_board_element });
       }
     }
     // const valuesFromSessionStorage = this.storageService.getArrayFromSessionStorage('mac_address') || [];
@@ -109,8 +113,10 @@ export class DashboardComponent implements OnInit {
     }
     this._serviceService.get_time_data(applicationData).subscribe((response: any) => {
       this.data_position = response.response
+      this.type_board = response.response
       this.hostpital_name = response.response[0].name
       this.address_hostpital = response.response[0].address
+
       for (let index = 0; index < this.data_position.length; index++) {
         const element = this.data_position[index].mac_address;
         const position = this.data_position[index].position;
@@ -123,43 +129,104 @@ export class DashboardComponent implements OnInit {
 
     if (this.mac_address_id_chart) {
 
-      // console.log('this.mac_address_id_chart', this.mac_address_id_chart);
-
       for (let index = 0; index < this.mac_address_id_chart.length; index++) {
-        const element = this.mac_address_id_chart[index].mac_address;
+        const item = this.mac_address_id_chart[index];
+
+        const element = item.mac_address;
+        const type_board = item.type_board;
+
         if (element) {
           const paramData = {
             mac_address: element,
             start_datetime: this.start_datetime,
             end_datetime: this.end_datetime,
+            type_board: type_board
           }
 
           this._serviceService.get_time_data_by_all(paramData).pipe(
             switchMap((response: any) => {
-              const temperature = response.temperature;
-              const humidity = response.humidity;
-              const date_data = response.date_data;
-              const max_humidity_data = response.max_humidity_data;
-              const min_humidity_data = response.min_humidity_data;
-              const max_temperature_data = response.max_temperature_data;
-              const min_temperature_data = response.min_temperature_data;
+              if (response.records1_data !== null) {
+                const temperature = response.records1_data.temperature;
+                const humidity = response.records1_data.humidity;
+                const date_data = response.records1_data.date_data;
+                const max_humidity_data = response.records1_data.max_humidity_data;
+                const min_humidity_data = response.records1_data.min_humidity_data;
+                const max_temperature_data = response.records1_data.max_temperature_data;
+                const min_temperature_data = response.records1_data.min_temperature_data;
 
-              const average_temperature = response.average_temperature;
-              const average_humidity = response.average_humidity;
-              const indexOfObjectToUpdate = this.mac_address_id_chart.findIndex(item => item.mac_address === element);
+                const average_temperature = response.records1_data.average_temperature;
+                const average_humidity = response.records1_data.average_humidity;
+                const indexOfObjectToUpdate = this.mac_address_id_chart.findIndex(item => item.mac_address === element);
 
-              if (indexOfObjectToUpdate !== -1) {
-                this.mac_address_id_chart[indexOfObjectToUpdate].max_humidity_data = max_humidity_data;
-                this.mac_address_id_chart[indexOfObjectToUpdate].min_humidity_data = min_humidity_data;
-                this.mac_address_id_chart[indexOfObjectToUpdate].max_temperature_data = max_temperature_data;
-                this.mac_address_id_chart[indexOfObjectToUpdate].min_temperature_data = min_temperature_data;
+                if (indexOfObjectToUpdate !== -1) {
+                  this.mac_address_id_chart[indexOfObjectToUpdate].max_humidity_data = max_humidity_data;
+                  this.mac_address_id_chart[indexOfObjectToUpdate].min_humidity_data = min_humidity_data;
+                  this.mac_address_id_chart[indexOfObjectToUpdate].max_temperature_data = max_temperature_data;
+                  this.mac_address_id_chart[indexOfObjectToUpdate].min_temperature_data = min_temperature_data;
 
-                this.mac_address_id_chart[indexOfObjectToUpdate].average_temperature = average_temperature;
-                this.mac_address_id_chart[indexOfObjectToUpdate].average_humidity = average_humidity;
+                  this.mac_address_id_chart[indexOfObjectToUpdate].average_temperature = average_temperature;
+                  this.mac_address_id_chart[indexOfObjectToUpdate].average_humidity = average_humidity;
+                }
+                const chartLine = document.getElementById(element) as HTMLCanvasElement;
+                this.new_chart(chartLine, this.new_data_service(date_data, temperature, humidity))
+                return of(response.records1_data);
+
               }
-              const chartLine = document.getElementById(element) as HTMLCanvasElement;
-              this.new_chart(chartLine, this.new_data_service(date_data, temperature, humidity))
-              return of(response);
+              else if(response.records2_data !== null) {
+                const temperature = response.records2_data.temperature;
+                const humidity = response.records2_data.humidity;
+                const date_data = response.records2_data.date_data;
+                const max_humidity_data = response.records2_data.max_humidity_data;
+                const min_humidity_data = response.records2_data.min_humidity_data;
+                const max_temperature_data = response.records2_data.max_temperature_data;
+                const min_temperature_data = response.records2_data.min_temperature_data;
+
+                const average_temperature = response.records2_data.average_temperature;
+                const average_humidity = response.records2_data.average_humidity;
+                const indexOfObjectToUpdate = this.mac_address_id_chart.findIndex(item => item.mac_address === element);
+
+                if (indexOfObjectToUpdate !== -1) {
+                  this.mac_address_id_chart[indexOfObjectToUpdate].max_humidity_data = max_humidity_data;
+                  this.mac_address_id_chart[indexOfObjectToUpdate].min_humidity_data = min_humidity_data;
+                  this.mac_address_id_chart[indexOfObjectToUpdate].max_temperature_data = max_temperature_data;
+                  this.mac_address_id_chart[indexOfObjectToUpdate].min_temperature_data = min_temperature_data;
+
+                  this.mac_address_id_chart[indexOfObjectToUpdate].average_temperature = average_temperature;
+                  this.mac_address_id_chart[indexOfObjectToUpdate].average_humidity = average_humidity;
+                }
+                const chartLine = document.getElementById(element) as HTMLCanvasElement;
+                this.new_chart(chartLine, this.new_data_service(date_data, temperature, humidity))
+                return of(response.records2_data);
+              }
+              else if(response.records3_data !== null) {
+                const temperature = response.records3_data.temperature;
+                const humidity = response.records3_data.humidity;
+                const date_data = response.records3_data.date_data;
+                const max_humidity_data = response.records3_data.max_humidity_data;
+                const min_humidity_data = response.records3_data.min_humidity_data;
+                const max_temperature_data = response.records3_data.max_temperature_data;
+                const min_temperature_data = response.records3_data.min_temperature_data;
+
+                const average_temperature = response.records3_data.average_temperature;
+                const average_humidity = response.records3_data.average_humidity;
+                const indexOfObjectToUpdate = this.mac_address_id_chart.findIndex(item => item.mac_address === element);
+
+                if (indexOfObjectToUpdate !== -1) {
+                  this.mac_address_id_chart[indexOfObjectToUpdate].max_humidity_data = max_humidity_data;
+                  this.mac_address_id_chart[indexOfObjectToUpdate].min_humidity_data = min_humidity_data;
+                  this.mac_address_id_chart[indexOfObjectToUpdate].max_temperature_data = max_temperature_data;
+                  this.mac_address_id_chart[indexOfObjectToUpdate].min_temperature_data = min_temperature_data;
+
+                  this.mac_address_id_chart[indexOfObjectToUpdate].average_temperature = average_temperature;
+                  this.mac_address_id_chart[indexOfObjectToUpdate].average_humidity = average_humidity;
+                }
+                const chartLine = document.getElementById(element) as HTMLCanvasElement;
+                this.new_chart(chartLine, this.new_data_service(date_data, temperature, humidity))
+                return of(response.records3_data);
+              }
+              else{
+                return of(response);
+              }
             })
           ).subscribe(() => {
 
@@ -406,7 +473,7 @@ export class DashboardComponent implements OnInit {
   calibrate_sensor_3: any;
   position: any;
   selectedTimeNotify: any;
-  id_notify:any;
+  id_notify: any;
   // editingRow: number = -1;
 
   openModalNotify(index: number): void {
