@@ -192,7 +192,7 @@
                       </p>
 
                       <div class="position-relative mb-4">
-                        <canvas id="{{item.mac_address}}"></canvas>
+                        <canvas id="{{item.mac_address+item.type_board}}"></canvas>
                       </div>
                       <hr>
                       <!-- /.chart-responsive -->
@@ -200,8 +200,13 @@
                     <!-- /.col -->
                     <div class="col-md-3">
 
-                      <p class="text-center">
+                      <p class="text-center" style="display: flex; flex-direction: column; align-items: flex-start;">
                         <strong>จุดปฏิบัติการ : {{item.position}} </strong>
+                        <!-- <strong>เซ็นเซอร์ : {{item.type_board}} </strong> -->
+                        <strong>
+                          เซ็นเซอร์ :
+                          {{ item.type_board === 'S1' ? 'เซ็นเซอร์1' : item.type_board === 'S2' ? 'เซ็นเซอร์2' : item.type_board }}
+                        </strong>
                       </p>
                       <div class="row col-12">
                         <div class="col-6">
@@ -436,7 +441,7 @@
     </footer>
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
+      <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
             <h1 class="modal-title fs-5" id="exampleModalLabel">กรุณาเลือกเครื่องที่ต้องการ พิมพ์</h1>
@@ -448,6 +453,7 @@
                 <thead>
                   <tr>
                     <th>ตำแหน่ง</th>
+                    <th>เซ็นเซอร์</th>
                     <th>Mac Address</th>
                     <th>Action</th>
                   </tr>
@@ -462,14 +468,17 @@
                           value="{{item.position}}">
                       </div> -->
                     </td>
+                    <td>
+                      {{ item.type_board === 'S1' ? 'เซ็นเซอร์ที่1' : item.type_board === 'S2' ? 'เซ็นเซอร์ที่2' : '' }}
+                    </td>
                     <td>{{ item.mac_address }}</td>
                     <td>
                       <button class="btn btn-sm btn-primary" style="margin-right: 2px;"
-                        (click)="printChartData(item.mac_address); closeModal()">พิมพ์</button>
+                        (click)="printChartData(item.mac_address, item.type_board); closeModal()">พิมพ์</button>
                       <button class="btn btn-sm btn-primary" style="margin-right: 2px;"
-                        (click)="goToExcel(item.mac_address); closeModal()">Excel</button>
+                        (click)="goToExcel(item.mac_address, item.type_board); closeModal()">Excel</button>
                       <button class="btn btn-sm btn-primary"
-                        (click)="printChartData_v2(item.mac_address); closeModal()">Template</button>
+                        (click)="printChartData_v2(item.mac_address, item.type_board); closeModal()">Template</button>
                     </td>
                   </tr>
                 </tbody>

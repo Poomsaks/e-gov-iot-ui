@@ -105,6 +105,7 @@
         <td style="border: 2px solid black; padding-top: 15px;">
           <p>{{item_1.mac_address}}</p>
           <p>{{item_1.position}}</p>
+          <p>{{item_1.type_board === 'S1' ? 'เซ็นเซอร์1' : item_1.type_board === 'S2' ? 'เซ็นเซอร์2' : item_1.type_board}}</p>
         </td>
         <td style="border: 2px solid black; padding-top: 15px;">
           <p>อุณหภูมิ</p>
@@ -142,6 +143,7 @@
         <td style="border: 2px solid black; padding-top: 15px;">
           <p>{{item_1.mac_address}}</p>
           <p>{{item_1.position}}</p>
+          <p>{{item_1.type_board === 'S1' ? 'เซ็นเซอร์1' : item_1.type_board === 'S2' ? 'เซ็นเซอร์2' : item_1.type_board}}</p>
         </td>
         <td style="border: 2px solid black; padding-top: 15px;">
           <p>อุณหภูมิ</p>
@@ -166,7 +168,7 @@
         <ng-container *ngFor="let itemArray of data_all">
           <ng-container *ngFor="let item of itemArray">
             <th style="border: 2px solid black; padding-top: 15px;">
-              <p>{{ item.date | date:'dd/MM' }}<br>{{ item.date | date:'HH:mm' }}</p>
+              <p>{{ item[7] | date:'dd/MM' }}<br>{{ item[7] | date:'HH:mm' }}</p>
             </th>
           </ng-container>
         </ng-container>
@@ -176,6 +178,7 @@
         <td style="border: 2px solid black; padding-top: 15px;">
           <p>{{item_1.mac_address}}</p>
           <p>{{item_1.position}}</p>
+          <p>{{item_1.type_board === 'S1' ? 'เซ็นเซอร์11' : item_1.type_board === 'S2' ? 'เซ็นเซอร์2' : item_1.type_board}}</p>
         </td>
         <td style="border: 2px solid black; padding-top: 15px;">
           <p>อุณหภูมิ</p>
@@ -186,10 +189,11 @@
         <ng-container *ngFor="let itemArray of data_all">
           <!-- วนลูปเพื่อแสดงข้อมูลของแต่ละวัน -->
           <ng-container *ngFor="let item of itemArray">
-            <td style="border: 2px solid black; padding-top: 15px;" *ngIf="item.mac_address === item_1.mac_address">
+            <td style="border: 2px solid black; padding-top: 15px;" *ngIf="item[2] === item_1.mac_address">
+            <!-- <td style="border: 2px solid black; padding-top: 15px;" *ngIf="item.mac_address === item_1.mac_address"> -->
               <!-- <th style="border: 2px solid black; padding-top: 15px;"><p>{{ item.temperature }}<br>{{ item.humidity }}</p></th> -->
-              <p> {{ item.temperature }} </p>
-              <p> {{ item.humidity }} </p>
+              <p>{{ item[3] }}</p> <!-- Temperature -->
+              <p>{{ item[4] }}</p> <!-- Humidity -->
             </td>
           </ng-container>
         </ng-container>

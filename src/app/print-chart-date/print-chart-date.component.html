@@ -27,8 +27,16 @@
           </div>
 
           <div class="col-md-12">
-            <p class="text-center">
+            <!-- <p class="text-center">
               <strong>จุดปฏิบัติการ : {{item.position}} </strong>
+            </p> -->
+            <p class="text-center" style="display: flex; flex-direction: column;">
+              <strong>จุดปฏิบัติการ : {{item.position}} </strong>
+              <!-- <strong>เซ็นเซอร์ : {{item.type_board}} </strong> -->
+              <strong>
+                เซ็นเซอร์ :
+                {{ item.type_board === 'S1' ? 'เซ็นเซอร์1' : item.type_board === 'S2' ? 'เซ็นเซอร์2' : item.type_board }}
+              </strong>
             </p>
             <div class="row col-12">
               <div class="col-6">

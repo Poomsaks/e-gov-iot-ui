@@ -63,6 +63,10 @@ export class LoginComponent {
             for (let index = 0; index < address.length; index++) {
               const element_1 = address[index].mac_address;
               const element_2 = address[index].type_board;
+              if (address[index].type_board == 'S2') {
+                this.mac_address_data.push(element_1);
+                this.type_board_data.push('S1')
+              }
               this.mac_address_data.push(element_1);
               this.type_board_data.push(element_2)
               this.images = address[index].image;

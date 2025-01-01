@@ -38,7 +38,7 @@ export class PrintChartDateComponent {
       }
     }
   };
-  mac_address_id_chart: { mac_address: any, max_humidity_data: any, min_humidity_data: any, max_temperature_data: any, min_temperature_data: any, average_temperature: any, average_humidity: any , position: any}[] = [];
+  mac_address_id_chart: { mac_address: any, max_humidity_data: any, min_humidity_data: any, max_temperature_data: any, min_temperature_data: any, average_temperature: any, average_humidity: any , position: any, type_board: any}[] = [];
   start_datetime_chart!: Date;
   end_datetime_chart!: Date;
   datePipe = new DatePipe('en-US');
@@ -54,14 +54,17 @@ export class PrintChartDateComponent {
       this.loading = true; // เริ่มต้นการโหลด
       const data = JSON.parse(params['data']);
       const mac_address_chart = data.mac_address_chart
+      const type_board = data.type_board
       if (localStorage.getItem('mac_address')) {
         this.name = localStorage.getItem('name')
         const data: any = localStorage.getItem('mac_address')
-        const dataArray = data.split(',');
+        // const dataArray = data.split(',');
+        const dataArray = Array.from(new Set(data.split(',')));
+
         for (let index = 0; index < dataArray.length; index++) {
           if (dataArray[index] === mac_address_chart) {
             const element = dataArray[index];
-            this.mac_address_id_chart.push({ mac_address: element, max_humidity_data: 0, min_humidity_data: 0, max_temperature_data: 0, min_temperature_data: 0, average_temperature: 0, average_humidity: 0 , position: ""});
+            this.mac_address_id_chart.push({ mac_address: element, max_humidity_data: 0, min_humidity_data: 0, max_temperature_data: 0, min_temperature_data: 0, average_temperature: 0, average_humidity: 0 , position: "", type_board: ""});
           }
         }
       }
@@ -80,7 +83,7 @@ export class PrintChartDateComponent {
       const endDate: any = this.datePipe.transform(data.end_datetime_chart, 'yyyy-MM-dd 23:59:59');
 
       const applicationData = {
-        mac_address: this.name,
+        mac_address: this.name
       }
       this._serviceService.get_time_data(applicationData).subscribe((response: any) => {
         this.data_position = response.response
@@ -92,6 +95,7 @@ export class PrintChartDateComponent {
           const indexOfObjectToUpdate = this.mac_address_id_chart.findIndex(item => item.mac_address === element);
           if (indexOfObjectToUpdate !== -1) {
             this.mac_address_id_chart[indexOfObjectToUpdate].position = position;
+            this.mac_address_id_chart[indexOfObjectToUpdate].type_board = type_board;
           }
         }
       });
@@ -103,19 +107,22 @@ export class PrintChartDateComponent {
             mac_address: element,
             start_datetime: startDate,
             end_datetime: endDate,
+            type_board: type_board
           }
           this._serviceService.get_time_data_by_all(paramData).pipe(
             switchMap((response: any) => {
-              const temperature = response.temperature;
-              const humidity = response.humidity;
-              const date_data = response.date_data;
-              const max_humidity_data = response.max_humidity_data;
-              const min_humidity_data = response.min_humidity_data;
-              const max_temperature_data = response.max_temperature_data;
-              const min_temperature_data = response.min_temperature_data;
+              const records = response.records_data;
 
-              const average_temperature = response.average_temperature;
-              const average_humidity = response.average_humidity;
+              const temperature = records.temperature;
+              const humidity = records.humidity;
+              const date_data = records.date_data;
+              const max_humidity_data = records.max_humidity_data;
+              const min_humidity_data = records.min_humidity_data;
+              const max_temperature_data = records.max_temperature_data;
+              const min_temperature_data = records.min_temperature_data;
+
+              const average_temperature = records.average_temperature;
+              const average_humidity = records.average_humidity;
               const indexOfObjectToUpdate = this.mac_address_id_chart.findIndex(item => item.mac_address === element);
 
               if (indexOfObjectToUpdate !== -1) {

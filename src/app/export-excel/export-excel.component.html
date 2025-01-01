@@ -24,6 +24,7 @@
           <thead>
             <tr>
               <th>จุดปฏิบัติการ</th>
+              <th>เซ็นเซอร์</th>
               <th>Mac Address</th>
               <th>อุณหภูมิ</th>
               <th>อุณหภูมิสูงสุด</th>
@@ -39,6 +40,7 @@
           <tbody *ngFor="let item of mac_address_id_chart;">
             <tr *ngFor="let data of item.temperature;let i = index">
               <td>{{ item.position }}</td>
+              <td>{{ item.type_board }}</td>
               <td>{{ item.mac_address }}</td>
               <td>{{ item.temperature[i] | number: '1.2-2' }}</td>
               <td>{{ item.max_humidity_data | number: '1.2-2' }}</td>

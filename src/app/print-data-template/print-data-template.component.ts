@@ -23,7 +23,7 @@ export class PrintDataTemplateComponent {
   data_position: any;
   hostpital_name: any;
   address_hostpital: any;
-  mac_address_id_chart: { mac_address: any, max_humidity_data: any, min_humidity_data: any, max_temperature_data: any, min_temperature_data: any, average_temperature: any, average_humidity: any, position: any }[] = [];
+  mac_address_id_chart: { mac_address: any, max_humidity_data: any, min_humidity_data: any, max_temperature_data: any, min_temperature_data: any, average_temperature: any, average_humidity: any, position: any, type_board: any }[] = [];
   start_datetime_chart!: Date;
   end_datetime_chart!: Date;
   datePipe = new DatePipe('en-US');
@@ -71,12 +71,12 @@ export class PrintDataTemplateComponent {
   }
   saveNewDataSet1(data: any[]) {
     // ทำการบันทึกข้อมูลที่นี่
-    // console.log('Saving new dataset:', data);
+    console.log('Saving new saveNewDataSet1:', data);
     this.data_all2.push(data);
   }
   saveNewDataSet2(data: any[]) {
     // ทำการบันทึกข้อมูลที่นี่
-    // console.log('Saving new dataset:', data);
+    console.log('Saving new saveNewDataSet2:', data);
     this.data_all3.push(data);
   }
   loading: boolean = false;
@@ -85,14 +85,16 @@ export class PrintDataTemplateComponent {
       this.loading = true; // เริ่มต้นการโหลด
       const data = JSON.parse(params['data']);
       const mac_address_chart = data.mac_address_chart
+      const type_board = data.type_board
       if (localStorage.getItem('mac_address')) {
         this.name = localStorage.getItem('name')
         const data: any = localStorage.getItem('mac_address')
-        const dataArray = data.split(',');
+        // const dataArray = data.split(',');
+        const dataArray = Array.from(new Set(data.split(',')));
         for (let index = 0; index < dataArray.length; index++) {
           if (dataArray[index] === mac_address_chart) {
             const element = dataArray[index];
-            this.mac_address_id_chart.push({ mac_address: element, max_humidity_data: 0, min_humidity_data: 0, max_temperature_data: 0, min_temperature_data: 0, average_temperature: 0, average_humidity: 0, position: "" });
+            this.mac_address_id_chart.push({ mac_address: element, max_humidity_data: 0, min_humidity_data: 0, max_temperature_data: 0, min_temperature_data: 0, average_temperature: 0, average_humidity: 0, position: "", type_board: "" });
           }
         }
       }
@@ -113,15 +115,16 @@ export class PrintDataTemplateComponent {
         mac_address: this.name,
       }
       this._serviceService.get_time_data(applicationData).subscribe((response: any) => {
-        this.data_position = response.result.response
-        this.hostpital_name = response.result.response[0].name
-        this.address_hostpital = response.result.response[0].address
+        this.data_position = response.response
+        this.hostpital_name = response.response[0].name
+        this.address_hostpital = response.response[0].address
         for (let index = 0; index < this.data_position.length; index++) {
           const element = this.data_position[index].mac_address;
           const position = this.data_position[index].position;
           const indexOfObjectToUpdate = this.mac_address_id_chart.findIndex(item => item.mac_address === element);
           if (indexOfObjectToUpdate !== -1) {
             this.mac_address_id_chart[indexOfObjectToUpdate].position = position;
+            this.mac_address_id_chart[indexOfObjectToUpdate].type_board = type_board;
           }
         }
       });
@@ -132,51 +135,38 @@ export class PrintDataTemplateComponent {
             mac_address: element,
             start_datetime: startDate,
             end_datetime: endDate,
+            type_board: type_board,
           };
 
           this._serviceService.get_data_print_day(paramData).pipe(
             switchMap((response: any) => {
-              const data = response.result;
-
-              // ถ้า this.data_all ยังไม่มีข้อมูลใดๆ ให้เพิ่ม array ว่างก่อน
+              const data = response;
               if (this.data_all.length === 0) {
                 this.data_all.push([]);
               }
-
-              // รวมข้อมูลจาก response.result เข้าไปใน this.data_all[0]
               this.data_all[0] = this.data_all[0].concat(data);
-
-              // ตรวจสอบว่าความยาวของข้อมูลเกิน 24 รายการหรือไม่
               if (this.data_all[0].length >= 24) {
-                // แยกข้อมูลเมื่อความยาวของข้อมูลถึง 24
                 const newData = this.data_all[0].splice(24);
-                // ทำการบันทึกข้อมูลใหม่
                 this.saveNewDataSet1(this.data_all[0]);
-                // สร้างอาร์เรย์ใหม่เพื่อเก็บข้อมูลใหม่
                 this.data_all[0] = newData;
 
-                // ตรวจสอบว่ายังมีข้อมูลที่ต้องแยกเพิ่มอีกหรือไม่
                 while (this.data_all[0].length >= 24) {
-                  // แยกข้อมูลเพิ่มเติมเมื่อความยาวของข้อมูลถึง 24 อีกครั้ง
                   const moreNewData = this.data_all[0].splice(24);
-                  // ทำการบันทึกข้อมูลใหม่
                   this.saveNewDataSet2(this.data_all[0]);
-                  // สร้างอาร์เรย์ใหม่เพื่อเก็บข้อมูลใหม่
                   this.data_all[0] = moreNewData;
                 }
               }
-
+              console.log('this.data_all[0]', this.data_all[0]);
               return of(response);
             })
 
           ).subscribe(() => {
-            // คุณสามารถทำการดำเนินการอื่นๆ ได้ที่นี่ถ้าต้องการ
-            this.loading = false; // เมื่อโหลดเสร็จสิ้น
+            this.loading = false;
             // window.print();
           });
         }
         setTimeout(() => {
-          window.print(); // ทำการพิมพ์หลังจากที่ข้อมูลแสดงผลครบทั้งหมด
+          window.print();
         }, 500);
       }
       // if (this.mac_address_id_chart) {

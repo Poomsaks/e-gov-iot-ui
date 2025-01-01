@@ -8,11 +8,21 @@ import { of, switchMap } from 'rxjs';
 import { DatePipe } from '@angular/common';
 import { Modal } from 'bootstrap'
 
+interface DataPositionPrint {
+  mac_address: string;
+  position: string;
+  type_board: string;
+  name: string;
+  address: string;
+}
+
+
 @Component({
   selector: 'dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
+
 
 export class DashboardComponent implements OnInit {
 
@@ -21,7 +31,9 @@ export class DashboardComponent implements OnInit {
   intersect: boolean | undefined = true;
   date_show: Date = new Date();
 
+
   data_position: any;
+  data_position_print: DataPositionPrint[] = [];
   hostpital_name: any;
   address_hostpital: any;
   chartLineOptions: any = {
@@ -107,12 +119,13 @@ export class DashboardComponent implements OnInit {
     //   this.mac_address_id_chart.push({ mac_address: element, max_humidity_data: 0, min_humidity_data: 0, max_temperature_data: 0, min_temperature_data: 0 });
     // }
     // this.mac_address_id_chart.push(arrayOfObjects);
-    // console.log(this.mac_address_id_chart[0].mac_address)
+    // console.log('this.mac_address_id_chart', this.mac_address_id_chart)
     const applicationData = {
       mac_address: this.name,
     }
     this._serviceService.get_time_data(applicationData).subscribe((response: any) => {
       this.data_position = response.response
+      this.data_position_print = response.response
       this.type_board = response.response
       this.hostpital_name = response.response[0].name
       this.address_hostpital = response.response[0].address
@@ -120,10 +133,16 @@ export class DashboardComponent implements OnInit {
       for (let index = 0; index < this.data_position.length; index++) {
         const element = this.data_position[index].mac_address;
         const position = this.data_position[index].position;
-        const indexOfObjectToUpdate = this.mac_address_id_chart.findIndex(item => item.mac_address === element);
-        if (indexOfObjectToUpdate !== -1) {
-          this.mac_address_id_chart[indexOfObjectToUpdate].position = position;
-        }
+        this.mac_address_id_chart.forEach(item => {
+          if (item.mac_address === element) {
+            item.position = position;
+          }
+        });
+
+        // const indexOfObjectToUpdate = this.mac_address_id_chart.findIndex(item => item.mac_address === element);
+        // if (indexOfObjectToUpdate !== -1) {
+        //   this.mac_address_id_chart[indexOfObjectToUpdate].position = position;
+        // }
       }
     });
 
@@ -135,108 +154,51 @@ export class DashboardComponent implements OnInit {
         const element = item.mac_address;
         const type_board = item.type_board;
 
-        if (element) {
-          const paramData = {
-            mac_address: element,
-            start_datetime: this.start_datetime,
-            end_datetime: this.end_datetime,
-            type_board: type_board
-          }
+        const paramData = {
+          mac_address: element,
+          start_datetime: this.start_datetime,
+          end_datetime: this.end_datetime,
+          type_board: type_board
+        };
+        // console.log('element', paramData);
 
-          this._serviceService.get_time_data_by_all(paramData).pipe(
-            switchMap((response: any) => {
-              if (response.records1_data !== null) {
-                const temperature = response.records1_data.temperature;
-                const humidity = response.records1_data.humidity;
-                const date_data = response.records1_data.date_data;
-                const max_humidity_data = response.records1_data.max_humidity_data;
-                const min_humidity_data = response.records1_data.min_humidity_data;
-                const max_temperature_data = response.records1_data.max_temperature_data;
-                const min_temperature_data = response.records1_data.min_temperature_data;
+        this._serviceService.get_time_data_by_all(paramData).pipe(
+          switchMap((response: any) => {
+            const records = response.records_data;
 
-                const average_temperature = response.records1_data.average_temperature;
-                const average_humidity = response.records1_data.average_humidity;
-                const indexOfObjectToUpdate = this.mac_address_id_chart.findIndex(item => item.mac_address === element);
+            const temperature = records.temperature;
+            const humidity = records.humidity;
+            const date_data = records.date_data;
+            const max_humidity_data = records.max_humidity_data;
+            const min_humidity_data = records.min_humidity_data;
+            const max_temperature_data = records.max_temperature_data;
+            const min_temperature_data = records.min_temperature_data;
+            const average_temperature = records.average_temperature;
+            const average_humidity = records.average_humidity;
 
-                if (indexOfObjectToUpdate !== -1) {
-                  this.mac_address_id_chart[indexOfObjectToUpdate].max_humidity_data = max_humidity_data;
-                  this.mac_address_id_chart[indexOfObjectToUpdate].min_humidity_data = min_humidity_data;
-                  this.mac_address_id_chart[indexOfObjectToUpdate].max_temperature_data = max_temperature_data;
-                  this.mac_address_id_chart[indexOfObjectToUpdate].min_temperature_data = min_temperature_data;
+            if (item.mac_address === element) {
+              item.max_humidity_data = max_humidity_data;
+              item.min_humidity_data = min_humidity_data;
+              item.max_temperature_data = max_temperature_data;
+              item.min_temperature_data = min_temperature_data;
+              item.average_temperature = average_temperature;
+              item.average_humidity = average_humidity;
+            }
 
-                  this.mac_address_id_chart[indexOfObjectToUpdate].average_temperature = average_temperature;
-                  this.mac_address_id_chart[indexOfObjectToUpdate].average_humidity = average_humidity;
-                }
-                const chartLine = document.getElementById(element) as HTMLCanvasElement;
-                this.new_chart(chartLine, this.new_data_service(date_data, temperature, humidity))
-                return of(response.records1_data);
+            const chartLineId = `${element}${type_board}`;
+            const chartLine = document.getElementById(chartLineId) as HTMLCanvasElement;
 
-              }
-              else if(response.records2_data !== null) {
-                const temperature = response.records2_data.temperature;
-                const humidity = response.records2_data.humidity;
-                const date_data = response.records2_data.date_data;
-                const max_humidity_data = response.records2_data.max_humidity_data;
-                const min_humidity_data = response.records2_data.min_humidity_data;
-                const max_temperature_data = response.records2_data.max_temperature_data;
-                const min_temperature_data = response.records2_data.min_temperature_data;
+            if (chartLine) {
+              this.new_chart(chartLineId, this.new_data_service(date_data, temperature, humidity));
+            } else {
+              console.warn(`Element with ID ${chartLineId} not found.`);
+            }
 
-                const average_temperature = response.records2_data.average_temperature;
-                const average_humidity = response.records2_data.average_humidity;
-                const indexOfObjectToUpdate = this.mac_address_id_chart.findIndex(item => item.mac_address === element);
-
-                if (indexOfObjectToUpdate !== -1) {
-                  this.mac_address_id_chart[indexOfObjectToUpdate].max_humidity_data = max_humidity_data;
-                  this.mac_address_id_chart[indexOfObjectToUpdate].min_humidity_data = min_humidity_data;
-                  this.mac_address_id_chart[indexOfObjectToUpdate].max_temperature_data = max_temperature_data;
-                  this.mac_address_id_chart[indexOfObjectToUpdate].min_temperature_data = min_temperature_data;
-
-                  this.mac_address_id_chart[indexOfObjectToUpdate].average_temperature = average_temperature;
-                  this.mac_address_id_chart[indexOfObjectToUpdate].average_humidity = average_humidity;
-                }
-                const chartLine = document.getElementById(element) as HTMLCanvasElement;
-                this.new_chart(chartLine, this.new_data_service(date_data, temperature, humidity))
-                return of(response.records2_data);
-              }
-              else if(response.records3_data !== null) {
-                const temperature = response.records3_data.temperature;
-                const humidity = response.records3_data.humidity;
-                const date_data = response.records3_data.date_data;
-                const max_humidity_data = response.records3_data.max_humidity_data;
-                const min_humidity_data = response.records3_data.min_humidity_data;
-                const max_temperature_data = response.records3_data.max_temperature_data;
-                const min_temperature_data = response.records3_data.min_temperature_data;
-
-                const average_temperature = response.records3_data.average_temperature;
-                const average_humidity = response.records3_data.average_humidity;
-                const indexOfObjectToUpdate = this.mac_address_id_chart.findIndex(item => item.mac_address === element);
-
-                if (indexOfObjectToUpdate !== -1) {
-                  this.mac_address_id_chart[indexOfObjectToUpdate].max_humidity_data = max_humidity_data;
-                  this.mac_address_id_chart[indexOfObjectToUpdate].min_humidity_data = min_humidity_data;
-                  this.mac_address_id_chart[indexOfObjectToUpdate].max_temperature_data = max_temperature_data;
-                  this.mac_address_id_chart[indexOfObjectToUpdate].min_temperature_data = min_temperature_data;
-
-                  this.mac_address_id_chart[indexOfObjectToUpdate].average_temperature = average_temperature;
-                  this.mac_address_id_chart[indexOfObjectToUpdate].average_humidity = average_humidity;
-                }
-                const chartLine = document.getElementById(element) as HTMLCanvasElement;
-                this.new_chart(chartLine, this.new_data_service(date_data, temperature, humidity))
-                return of(response.records3_data);
-              }
-              else{
-                return of(response);
-              }
-            })
-          ).subscribe(() => {
-
-          });
-        }
-
+            return of(response);
+          })
+        ).subscribe();
       }
     }
-
-
   }
 
   new_chart(ChartItems: ChartItem, chartPie: any) {
@@ -340,7 +302,12 @@ export class DashboardComponent implements OnInit {
       }
     });
 
-    this.position_count = this.mac_address_id_chart.length.toString();
+    // this.position_count = this.mac_address_id_chart.length.toString();
+    const uniqueMacAddresses = this.mac_address_id_chart
+      .map(item => item.mac_address)
+      .filter((value, index, self) => self.indexOf(value) === index);
+
+    this.position_count = uniqueMacAddresses.length.toString();
   }
 
 
@@ -413,18 +380,19 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  goToExcel(mac_address: any) {
+  goToExcel(mac_address: any, type_board: any) {
     const applicationData = {
       mac_address_chart: mac_address,
       start_datetime_chart: this.datePipe.transform(this.start_datetime_chart, 'yyyy-MM-dd 00:00:00'),
       end_datetime_chart: this.datePipe.transform(this.end_datetime_chart, 'yyyy-MM-dd 23:59:59'),
+      type_board: type_board
     }
     const applicationDataString = JSON.stringify(applicationData);
-    const url = this.router.serializeUrl(
-      this.router.createUrlTree(['/meditech-pro/export-excel'], { queryParams: { data: applicationDataString } })
-    );
-    window.open(url, '_blank');
-    // this.router.navigate(['/export-excel'], { queryParams: { data: applicationDataString } });
+    // const url = this.router.serializeUrl(
+    //   this.router.createUrlTree(['/meditech-pro/export-excel'], { queryParams: { data: applicationDataString } })
+    // );
+    // window.open(url, '_blank');
+    this.router.navigate(['/export-excel'], { queryParams: { data: applicationDataString } });
   }
   private modalInstance: Modal | undefined;
   private modalNotify: Modal | undefined;
@@ -442,6 +410,14 @@ export class DashboardComponent implements OnInit {
 
   openModal(): void {
     if (this.modalInstance) {
+      const duplicatedData = this.data_position_print
+        .filter(element => element.type_board === 'S2')
+        .map(element => ({
+          ...element,
+          type_board: 'S1'
+        }));
+      console.log('Duplicated Data:', duplicatedData);
+      this.data_position = [...this.data_position, ...duplicatedData];
       this.modalInstance.show();
     }
   }
@@ -538,19 +514,20 @@ export class DashboardComponent implements OnInit {
 
     });
   }
-  printChartData(mac_address: any) {
+  printChartData(mac_address: any, type_board: any) {
     const applicationData = {
       mac_address_chart: mac_address,
       start_datetime_chart: this.datePipe.transform(this.start_datetime_chart, 'yyyy-MM-dd 00:00:00'),
       end_datetime_chart: this.datePipe.transform(this.end_datetime_chart, 'yyyy-MM-dd 23:59:59'),
+      type_board: type_board
     }
     const applicationDataString = JSON.stringify(applicationData);
-    const url = this.router.serializeUrl(
-      this.router.createUrlTree(['/meditech-pro/print-chart-date'], { queryParams: { data: applicationDataString } })
-    );
+    // const url = this.router.serializeUrl(
+    //   this.router.createUrlTree(['/meditech-pro/print-chart-date'], { queryParams: { data: applicationDataString } })
+    // );
 
-    window.open(url, '_blank');
-    // this.router.navigate(['/print-chart-date'], { queryParams: { data: applicationDataString } });
+    // window.open(url, '_blank');
+    this.router.navigate(['/print-chart-date'], { queryParams: { data: applicationDataString } });
 
   }
   // printChartData_v2() {
@@ -578,19 +555,20 @@ export class DashboardComponent implements OnInit {
   //   }
   // }
 
-  printChartData_v2(mac_address: any) {
+  printChartData_v2(mac_address: any, type_board: any) {
     const applicationData = {
       mac_address_chart: mac_address,
       start_datetime_chart: this.datePipe.transform(this.start_datetime_chart, 'yyyy-MM-dd 00:00:00'),
       end_datetime_chart: this.datePipe.transform(this.end_datetime_chart, 'yyyy-MM-dd 23:59:59'),
+      type_board: type_board
     }
     const applicationDataString = JSON.stringify(applicationData);
-    const url = this.router.serializeUrl(
-      this.router.createUrlTree(['/meditech-pro/print-data-template'], { queryParams: { data: applicationDataString } })
-    );
+    // const url = this.router.serializeUrl(
+    //   this.router.createUrlTree(['/meditech-pro/print-data-template'], { queryParams: { data: applicationDataString } })
+    // );
 
-    window.open(url, '_blank');
-    // this.router.navigate(['/print-data-template'], { queryParams: { data: applicationDataString } });
+    // window.open(url, '_blank');
+    this.router.navigate(['/print-data-template'], { queryParams: { data: applicationDataString } });
 
   }
 }

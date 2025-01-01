@@ -21,7 +21,7 @@ export class ExportExcelComponent {
     private route: ActivatedRoute,
 
   ) { }
-  mac_address_id_chart: { mac_address: any, max_humidity_data: any, min_humidity_data: any, max_temperature_data: any, min_temperature_data: any, average_temperature: any, average_humidity: any, position: any, temperature: any, humidity: any, date_data: any }[] = [];
+  mac_address_id_chart: { mac_address: any, max_humidity_data: any, min_humidity_data: any, max_temperature_data: any, min_temperature_data: any, average_temperature: any, average_humidity: any, position: any, temperature: any, humidity: any, date_data: any , type_board: any}[] = [];
   start_datetime_chart!: Date;
   end_datetime_chart!: Date;
   datePipe = new DatePipe('en-US');
@@ -38,14 +38,16 @@ export class ExportExcelComponent {
 
       const data = JSON.parse(params['data']);
       const mac_address_chart = data.mac_address_chart
+      const type_board = data.type_board
       if (localStorage.getItem('mac_address')) {
         this.name = localStorage.getItem('name')
         const data: any = localStorage.getItem('mac_address')
-        const dataArray = data.split(',');
+        // const dataArray = data.split(',');
+        const dataArray = Array.from(new Set(data.split(',')));
         for (let index = 0; index < dataArray.length; index++) {
           if (dataArray[index] === mac_address_chart) {
             const element = dataArray[index];
-            this.mac_address_id_chart.push({ mac_address: element, max_humidity_data: 0, min_humidity_data: 0, max_temperature_data: 0, min_temperature_data: 0, average_temperature: 0, average_humidity: 0, position: "", temperature: 0, humidity: 0, date_data: "" });
+            this.mac_address_id_chart.push({ mac_address: element, max_humidity_data: 0, min_humidity_data: 0, max_temperature_data: 0, min_temperature_data: 0, average_temperature: 0, average_humidity: 0, position: "", temperature: 0, humidity: 0, date_data: "", type_board: "" });
           }
         }
       }
@@ -73,6 +75,7 @@ export class ExportExcelComponent {
           const indexOfObjectToUpdate = this.mac_address_id_chart.findIndex(item => item.mac_address === element);
           if (indexOfObjectToUpdate !== -1) {
             this.mac_address_id_chart[indexOfObjectToUpdate].position = position;
+            this.mac_address_id_chart[indexOfObjectToUpdate].type_board = type_board;
           }
         }
       });
@@ -84,7 +87,9 @@ export class ExportExcelComponent {
             mac_address: element,
             start_datetime: startDate,
             end_datetime: endDate,
+            type_board: type_board
           }
+          console.log('this.paramData', paramData);
           this._serviceService.get_time_data_excel(paramData).pipe(
             switchMap((response: any) => {
               const temperature = response.temperature;

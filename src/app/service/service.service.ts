@@ -25,6 +25,7 @@ export class ServiceService {
         mac_address: applicationData.mac_address,
         start_datetime: applicationData.start_datetime,
         end_datetime: applicationData.end_datetime,
+        type_board:applicationData.type_board
       }
     };
     return this.http.post<any>(environment.config.baseConfig.apiUrl + "/get_data_print_day", payload, { withCredentials: true })
@@ -54,6 +55,7 @@ export class ServiceService {
         mac_address: applicationData.mac_address,
         start_datetime: applicationData.start_datetime,
         end_datetime: applicationData.end_datetime,
+        type_board: applicationData.type_board,
       }
     };
     return this.http.post<any>(environment.config.baseConfig.apiUrl + "/get_time_data_excel", payload, { withCredentials: true })
